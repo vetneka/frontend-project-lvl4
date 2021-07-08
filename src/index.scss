@@ -1,8 +1,1 @@
-$component-active-bg: #198754;
-
-.btn {
-  transition:
-    opacity 0.15s linear,
-    background-color 0.15s linear,
-    color 0.15s linear;
-}
+@import './scss/main.scss';

@@ -1,2 +1,6 @@
-@import '../src/index.scss';
+@import '../src/scss/custom-variables.scss';
+@import '../src/scss/custom-utilities.scss';
+
 @import '~bootstrap/scss/bootstrap';
+
+@import '../src/index.scss';

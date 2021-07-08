@@ -1,0 +1,42 @@
+body {
+  background-color: $primary;
+  color: $dark;
+}
+
+.container-light {
+  background-color: $light;
+}
+
+.btn {
+  transition:
+    opacity 0.15s linear,
+    background-color 0.15s linear,
+    color 0.15s linear;
+}
+
+.fs-hero {
+  font-size: calc(6.5rem + 1.5vw);
+
+  @media (min-width: 1200px) {
+    font-size: 12.5rem;
+  }
+}
+
+.icon {
+  display: block;
+  width: 33px;
+  height: 33px;
+  background: $light no-repeat center / cover;
+
+  &--github {
+    background-image: url("../assets/img/icon-github.png");
+  }
+  
+  &--hexlet {
+    background-image: url("../assets/img/icon-hexlet.png");
+  }
+
+  &--cmarix {
+    background-image: url("../assets/img/icon-cmarix.png");
+  }
+}
