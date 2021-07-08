@@ -36,6 +36,9 @@
     "pino-pretty": "^4.8.0",
     "point-of-view": "^4.14.0",
     "pug": "^3.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
