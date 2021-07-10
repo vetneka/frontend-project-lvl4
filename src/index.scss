@@ -1,1 +1,45 @@
-@import './scss/main.scss';
+.opacity-fade-in {
+  transition-duration: .33s;
+  transition-property: opacity;
+  transition-timing-function: ease-out;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}
+
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.fs-hero {
+  font-size: calc(1.375rem + 15.5vw);
+
+  @include media-breakpoint-up(xxl) {
+    font-size: 14rem;
+  }
+}
+
+.fs-dwarf {
+  font-size: 0.675em;
+}
+
+.icon {
+  display: block;
+  width: 27px;
+  height: 27px;
+  background: $light no-repeat center / cover;
+
+  &--github {
+    background-image: url("./icon-github.png");
+  }
+  
+  &--hexlet {
+    background-image: url("./icon-hexlet.png");
+  }
+
+  &--cmarix {
+    background-image: url("./icon-cmarix.png");
+  }
+}
