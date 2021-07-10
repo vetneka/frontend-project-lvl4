@@ -2,7 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import cn from 'classnames';
 
-const TextInput = ({ label, ...props}) => {
+const TextInput = React.forwardRef(({ label, ...props}, ref) => {
   const [field, meta] = useField({ ...props});
   const isInvalidField = meta.touched && meta.error;
 
@@ -14,7 +14,7 @@ const TextInput = ({ label, ...props}) => {
   return (
     <>
       <label className="form-label ps-3" htmlFor={props.name}>{label}</label>
-      <input className={inputClassName} id={props.name} {...field} {...props} />
+      <input ref={ref} className={inputClassName} id={props.name} {...field} {...props} />
       {
         (isInvalidField)
           ? <div className="invalid-tooltip small">{meta.error}</div>
@@ -22,6 +22,6 @@ const TextInput = ({ label, ...props}) => {
       }
     </>
   );
-};
+});
 
 export default TextInput;

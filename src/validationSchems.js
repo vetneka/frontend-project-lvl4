@@ -8,7 +8,7 @@ const username = yup
 const password = yup
   .string()
   .required('This is required field')
-  .min(6, 'Must be at least 6 characters');
+  .min(5, 'Must be at least 5 characters');
 
 const passwordConfirmation = yup
   .string()
@@ -18,7 +18,9 @@ const passwordConfirmation = yup
 
 export const loginSchema = yup.object({
   username,
-  password,
+  password: yup
+    .string()
+    .required('This is required field')
 });
 
 export const signUpSchema = yup.object({
