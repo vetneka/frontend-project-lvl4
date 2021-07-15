@@ -15,10 +15,19 @@ const buildState = (defaultState) => {
       { id: generalChannelId, name: 'general', removable: false },
       { id: randomChannelId, name: 'random', removable: false },
     ],
-    messages: [],
+    // messages: [],
+    messages: [
+      { body: 'text 1', name: 'random', username: "random", id: "1" },
+      { body: 'text 2', name: 'random', username: "random", id: "2" },
+      { body: 'text 3', name: 'random', username: "random", id: "3" },
+      { body: 'text 4', name: 'random', username: "random", id: "4" },
+      { body: 'text 5', name: 'random', username: "random", id: "5" },
+      { body: 'text 6', name: 'random', username: "random", id: "6" },
+    ],
     currentChannelId: generalChannelId,
     users: [
       { id: 1, username: 'admin', password: 'admin' },
+      { id: 2, username: 'hexlet', password: 'hexlet' },
     ],
   };
 
@@ -49,6 +58,7 @@ export default (app, defaultState = {}) => {
         ...message,
         id: getNextId(),
       };
+      console.log('message', message);
       state.messages.push(messageWithId);
       acknowledge({ status: 'ok' });
       app.io.emit('newMessage', messageWithId);

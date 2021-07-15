@@ -1,3 +1,7 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
 .opacity-fade-in {
   transition-duration: .33s;
   transition-property: opacity;
@@ -42,4 +46,68 @@
   &--cmarix {
     background-image: url("./icon-cmarix.png");
   }
+}
+
+.avatar {
+  position: relative;
+  padding: map-get($spacers, 3);
+  border-radius: $border-radius-pill;
+}
+
+.avatar__body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: $light;
+  font-size: $h5-font-size;
+}
+
+.message {
+  display: flex;
+  align-items: flex-end;
+
+  &--mirror {
+    justify-content: flex-end;
+
+    .message__body {
+      order: -1;
+      margin-left: 0;
+      margin-right: map-get($spacers, 2);
+      background-color: $info;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: $border-radius-lg;
+    }
+
+    .message__username {
+      text-align: right;
+    }
+
+    .message__avatar {
+      background-color: $info;
+    }
+  }
+}
+
+.message__body {
+  max-width: 80%;
+  margin-left: map-get($spacers, 2);
+  padding: map-get($spacers, 2) map-get($spacers, 3);
+  border-radius: $border-radius-lg;
+  border-bottom-left-radius: 0;
+  background-color: $success;
+  color: $light;
+}
+
+.message__text {
+  margin-bottom: map-get($spacers, 1);
+}
+
+.message__username {
+  font-size: $small-font-size;
+  font-style: italic;
+}
+
+.message__avatar {
+  background-color: $success;
 }

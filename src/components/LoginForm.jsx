@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import cn from 'classnames';
 
-import AuthContext from '../contexts/index.js';
+import { AuthContext } from '../contexts/index.js';
 import routes from '../routes';
 
 import TextInput from './TextInput.jsx';
