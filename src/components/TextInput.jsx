@@ -2,8 +2,8 @@ import React from 'react';
 import { useField } from 'formik';
 import cn from 'classnames';
 
-const TextInput = React.forwardRef(({ label, ...props}, ref) => {
-  const [field, meta] = useField({ ...props});
+const TextInput = React.forwardRef(({ label, ...props }, ref) => {
+  const [field, meta] = useField({ ...props });
   const isInvalidField = meta.touched && meta.error;
 
   const inputClassName = cn('form-control rounded-pill', {

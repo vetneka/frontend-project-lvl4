@@ -8,11 +8,12 @@ import {
 
 import { Provider } from 'react-redux';
 
+import { io } from 'socket.io-client';
 import store from './store.js';
 
-import { io } from "socket.io-client";
-
-import { Home, Login, SignUp, NotFound } from './pages/index.js';
+import {
+  Home, Login, SignUp, NotFound,
+} from './pages/index.js';
 import { Header, Main, Footer } from './components/index.js';
 import { AuthContext, SocketContext } from './contexts/index.js';
 import { addMessage } from './slices/messagesInfoSlice.js';
@@ -35,47 +36,45 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const PrivateRoute = ({ children, path }) => {
-  const auth = React.useContext(AuthContext);
-
-  return (
-    <Route path={path}>
-      {
+const PrivateRoute = ({ children, path }) => (
+  <Route path={path}>
+    {
         (checkUserToken())
           ? children
           : <Redirect to="/login" />
       }
-    </Route>
-  );
-};
+  </Route>
+);
 
 const SocketProvider = ({ children }) => {
   const socket = io();
 
   const acknowledgeWithTimeout = (onSuccess, onTimeout, timeout) => {
-    let isCalled = false;
+    const status = {
+      isCalled: false,
+    };
 
     const timerId = setTimeout(() => {
-      if (isCalled) return;
-      isCalled = true;
+      if (status.isCalled) return;
+      status.isCalled = true;
       onTimeout();
     }, timeout);
-    
+
     return (...args) => {
-      if (isCalled) return;
-      isCalled = true;
+      if (status.isCalled) return;
+      status.isCalled = true;
       clearTimeout(timerId);
-      onSuccess.apply(this, args);
+      onSuccess(args);
     };
   };
 
-  socket.on("newMessage", (message) => {
+  socket.on('newMessage', (message) => {
     store.dispatch(addMessage(message));
   });
 
   const sendMessage = (message) => {
     socket.emit('newMessage', message, (response) => {
-      console.log('response.status', response.status)
+      console.log('response.status', response.status);
     });
   };
 
@@ -86,37 +85,35 @@ const SocketProvider = ({ children }) => {
   );
 };
 
-const App = () => {
-  return (
-    <>
-      <Provider store={store}>
-        <SocketProvider>
-          <AuthProvider>
-            <Header />
+const App = () => (
+  <>
+    <Provider store={store}>
+      <SocketProvider>
+        <AuthProvider>
+          <Header />
 
-            <Main>
-              <Switch>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/signup">
-                  <SignUp />
-                </Route>
-                <PrivateRoute exact path="/">
-                  <Home />
-                </PrivateRoute>
-                <Route path="*">
-                  <NotFound />
-                </Route>
-              </Switch>
-            </Main>
-            
-            <Footer />
-          </AuthProvider>
-        </SocketProvider>
-      </Provider>
-    </>
-  );
-};
+          <Main>
+            <Switch>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/signup">
+                <SignUp />
+              </Route>
+              <PrivateRoute exact path="/">
+                <Home />
+              </PrivateRoute>
+              <Route path="*">
+                <NotFound />
+              </Route>
+            </Switch>
+          </Main>
+
+          <Footer />
+        </AuthProvider>
+      </SocketProvider>
+    </Provider>
+  </>
+);
 
 export default App;

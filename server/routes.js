@@ -17,12 +17,24 @@ const buildState = (defaultState) => {
     ],
     // messages: [],
     messages: [
-      { body: 'text 1', name: 'random', username: "random", id: "1" },
-      { body: 'text 2', name: 'random', username: "random", id: "2" },
-      { body: 'text 3', name: 'random', username: "random", id: "3" },
-      { body: 'text 4', name: 'random', username: "random", id: "4" },
-      { body: 'text 5', name: 'random', username: "random", id: "5" },
-      { body: 'text 6', name: 'random', username: "random", id: "6" },
+      {
+        body: 'text 1', name: 'random', username: 'random', id: '1',
+      },
+      {
+        body: 'text 2', name: 'random', username: 'random', id: '2',
+      },
+      {
+        body: 'text 3', name: 'random', username: 'random', id: '3',
+      },
+      {
+        body: 'text 4', name: 'random', username: 'random', id: '4',
+      },
+      {
+        body: 'text 5', name: 'random', username: 'random', id: '5',
+      },
+      {
+        body: 'text 6', name: 'random', username: 'random', id: '6',
+      },
     ],
     currentChannelId: generalChannelId,
     users: [

@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 import axios from 'axios';
 import routes from '../routes.js';
@@ -44,7 +45,7 @@ export const {
 
 export const setInitialStateAsync = () => async (dispatch) => {
   try {
-    const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });4
+    const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
     dispatch(setInitialState(response.data));
     console.log(response);
   } catch (error) {

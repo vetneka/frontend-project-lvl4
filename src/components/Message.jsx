@@ -2,7 +2,6 @@ import React from 'react';
 import cn from 'classnames';
 
 const Message = (props) => {
-  // const messageRef = React.useRef();
   const { username, body, currentUsername } = props;
 
   const messageLabel = username[0].toUpperCase();
@@ -10,10 +9,6 @@ const Message = (props) => {
   const messageClasses = cn('message', {
     'message--mirror': currentUsername === username,
   });
-
-  // React.useEffect(() => {
-  //   messageRef.current.scrollIntoView(false);
-  // }, []);
 
   return (
     <div className={messageClasses}>

@@ -36,23 +36,23 @@ const AddMessageForm = (props) => {
   }, []);
 
   return (
-    <Formik 
+    <Formik
       initialValues={{
-        'message': '',
+        message: '',
       }}
       onSubmit={handleSubmit}
     >
-      {(props) => {
-        const isSubmitDisabled = props.isSubmitting || props.values.message === '';
-        
+      {(formikProps) => {
+        const isSubmitDisabled = formikProps.isSubmitting || formikProps.values.message === '';
+
         return (
-          <Form className="row g-3" >
+          <Form className="row g-3">
             <div className="col-12 position-relative d-flex">
-              <Field innerRef={messageInputRef} className="form-control rounded-pill me-2" id="new-message" name="message" type="text" disabled={props.isSubmitting}/>
+              <Field innerRef={messageInputRef} className="form-control rounded-pill me-2" id="new-message" name="message" type="text" disabled={formikProps.isSubmitting} />
               <button className="btn btn-primary rounded-pill" type="submit" disabled={isSubmitDisabled}>Send</button>
             </div>
           </Form>
-        )
+        );
       }}
     </Formik>
   );

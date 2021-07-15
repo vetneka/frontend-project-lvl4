@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const messagesInfoSlice = createSlice({
   name: 'messagesInfo',

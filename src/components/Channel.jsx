@@ -7,9 +7,9 @@ const calculateColor = (id) => availableColors[id % availableColors.length];
 const Channel = (props) => {
   const { id, name, currentChannelId } = props;
   const channelLabel = name[0].toUpperCase();
-  
-  const channelClasses = cn('w-100 btn btn-light border-0 rounded-0 d-flex align-items-center', {
-    [`border-${calculateColor(id)} border-start border-2`]: id === currentChannelId,
+
+  const channelClasses = cn('w-100 btn border-top-0 border-end-0 border-bottom-0 border-2 rounded-0 d-flex align-items-center', {
+    [`border-${calculateColor(id)}`]: id === currentChannelId,
   });
 
   const channelLabelClasses = cn('p-3 rounded-circle me-2 position-relative', {
@@ -21,7 +21,7 @@ const Channel = (props) => {
       <span className={channelLabelClasses}>
         <span className="position-absolute text-light fs-5 top-50 left-50 translate-middle">{channelLabel}</span>
       </span>
-      <span>{name}</span>
+      <span className="d-none d-sm-inline">{name}</span>
     </button>
   );
 };
