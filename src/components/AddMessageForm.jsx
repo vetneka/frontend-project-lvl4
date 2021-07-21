@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Formik, Form, Field } from 'formik';
-
 import { SocketContext } from '../contexts/index.js';
 
 const AddMessageForm = (props) => {

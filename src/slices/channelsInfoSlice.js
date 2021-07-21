@@ -23,7 +23,9 @@ const channelsInfoSlice = createSlice({
       state.channels = payload.channels;
       state.currentChannelId = payload.currentChannelId;
     },
-    setCurrentChannel: () => {},
+    setCurrentChannel: (state, { payload }) => {
+      state.currentChannelId = payload;
+    },
     addChannel: () => {},
     renameChannel: () => {},
     removeChannel: () => {},
@@ -43,11 +45,10 @@ export const {
   removeChannel,
 } = channelsInfoSlice.actions;
 
-export const setInitialStateAsync = () => async (dispatch) => {
+export const setInitialStateThunk = () => async (dispatch) => {
   try {
     const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
     dispatch(setInitialState(response.data));
-    console.log(response);
   } catch (error) {
     console.dir(error);
   }

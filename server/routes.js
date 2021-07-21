@@ -18,22 +18,16 @@ const buildState = (defaultState) => {
     // messages: [],
     messages: [
       {
-        body: 'text 1', name: 'random', username: 'random', id: '1',
+        body: 'Message from random 1', channelId: randomChannelId, username: 'random', id: getNextId(),
       },
       {
-        body: 'text 2', name: 'random', username: 'random', id: '2',
+        body: 'Message from general 1', channelId: generalChannelId, username: 'general', id: getNextId(),
       },
       {
-        body: 'text 3', name: 'random', username: 'random', id: '3',
+        body: 'Message from random 2', channelId: randomChannelId, username: 'random', id: getNextId(),
       },
       {
-        body: 'text 4', name: 'random', username: 'random', id: '4',
-      },
-      {
-        body: 'text 5', name: 'random', username: 'random', id: '5',
-      },
-      {
-        body: 'text 6', name: 'random', username: 'random', id: '6',
+        body: 'Message from general 2', channelId: generalChannelId, username: 'general', id: getNextId(),
       },
     ],
     currentChannelId: generalChannelId,

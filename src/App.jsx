@@ -16,6 +16,7 @@ import {
 } from './pages/index.js';
 import { Header, Main, Footer } from './components/index.js';
 import { AuthContext, SocketContext } from './contexts/index.js';
+
 import { addMessage } from './slices/messagesInfoSlice.js';
 
 const checkUserToken = () => JSON.parse(localStorage.getItem('userId'));
@@ -72,14 +73,8 @@ const SocketProvider = ({ children }) => {
     store.dispatch(addMessage(message));
   });
 
-  const sendMessage = (message) => {
-    socket.emit('newMessage', message, (response) => {
-      console.log('response.status', response.status);
-    });
-  };
-
   return (
-    <SocketContext.Provider value={{ socket, sendMessage, acknowledgeWithTimeout }}>
+    <SocketContext.Provider value={{ socket, acknowledgeWithTimeout }}>
       {children}
     </SocketContext.Provider>
   );

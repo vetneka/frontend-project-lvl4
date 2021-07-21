@@ -21,10 +21,12 @@ const Home = () => {
   const [pageState, setPageState] = React.useState('pending');
 
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
-  const { messages } = useSelector((state) => state.messagesInfo);
   const activeChannel = useSelector((state) => selectChannelById(state, currentChannelId));
+  const messages = useSelector((state) => {
+    const allMessages = state.messagesInfo.messages;
+    return allMessages.filter((message) => message.channelId === activeChannel.id);
+  });
   const dispatch = useDispatch();
-
   const messagesContainerRef = React.useRef();
 
   React.useEffect(() => {
@@ -34,6 +36,7 @@ const Home = () => {
           dispatch(setInitialState(response.data));
           setPageState('fulfilled');
         })
+        .then(() => console.log(messages))
         .catch((error) => {
           setPageState('rejected');
           console.error(error);
