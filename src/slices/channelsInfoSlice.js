@@ -26,7 +26,10 @@ const channelsInfoSlice = createSlice({
     setCurrentChannel: (state, { payload }) => {
       state.currentChannelId = payload;
     },
-    addChannel: () => {},
+    addChannel: (state, { payload }) => {
+      state.channels.push(payload);
+      state.currentChannelId = payload.id;
+    },
     renameChannel: () => {},
     removeChannel: () => {},
   },

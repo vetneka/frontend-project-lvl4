@@ -5,8 +5,10 @@ import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import routes from '../routes.js';
 
+import getModal from '../components/modals/index.js';
 import { Channel, Message, AddMessageForm } from '../components/index.js';
 import { setInitialState, selectChannelById } from '../slices/channelsInfoSlice';
+import { openModal, closeModal } from '../slices/modalSlice';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -17,6 +19,12 @@ const getAuthHeader = () => {
 };
 
 const Home = () => {
+  // const [modalInfo, setModalInfo] = React.useState({
+  //   type: null,
+  // });
+
+  const modalType = useSelector((state) => state.modal.type);
+
   const currentUser = JSON.parse(localStorage.getItem('userId'));
   const [pageState, setPageState] = React.useState('pending');
 
@@ -29,6 +37,19 @@ const Home = () => {
   const dispatch = useDispatch();
   const messagesContainerRef = React.useRef();
 
+  const onHideModal = () => {
+    dispatch(closeModal());
+  };
+
+  const onShowModal = (type, item = null) => () => {
+    dispatch(openModal({ type, item }));
+  };
+
+  const renderModal = (type) => {
+    const Modal = getModal(type);
+    return <Modal onHide={onHideModal} />;
+  };
+
   React.useEffect(() => {
     if (pageState === 'pending') {
       axios.get(routes.dataPath(), { headers: getAuthHeader() })
@@ -36,7 +57,6 @@ const Home = () => {
           dispatch(setInitialState(response.data));
           setPageState('fulfilled');
         })
-        .then(() => console.log(messages))
         .catch((error) => {
           setPageState('rejected');
           console.error(error);
@@ -62,7 +82,7 @@ const Home = () => {
 
       <div className="row h-100">
         <div className="col-3 shadow">
-          <Button variant="outline-primary" className="rounded-pill mb-3 d-flex align-items-center">
+          <Button variant="outline-primary" className="rounded-pill mb-3 d-flex align-items-center" onClick={onShowModal('adding')}>
             <span className="me-2 d-none d-sm-inline">Add channel</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="currentColor">
               <path d="M256 0C114.833 0 0 114.833 0 256s114.833 256 256 256 256-114.853 256-256S397.167 0 256 0zm0 472.341c-119.275 0-216.341-97.046-216.341-216.341S136.725 39.659 256 39.659 472.341 136.705 472.341 256 375.295 472.341 256 472.341z" />
@@ -75,7 +95,7 @@ const Home = () => {
           <ul className="list-unstyled row g-2">
             {channels.map((channel) => (
               <li key={channel.id}>
-                <Channel id={channel.id} currentChannelId={currentChannelId} name={channel.name} />
+                <Channel channel={channel} currentChannelId={currentChannelId} />
               </li>
             ))}
           </ul>
@@ -115,6 +135,8 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        {modalType && renderModal(modalType)}
       </div>
     </>
   );

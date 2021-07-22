@@ -17,6 +17,7 @@ import {
 import { Header, Main, Footer } from './components/index.js';
 import { AuthContext, SocketContext } from './contexts/index.js';
 
+import { addChannel } from './slices/channelsInfoSlice.js';
 import { addMessage } from './slices/messagesInfoSlice.js';
 
 const checkUserToken = () => JSON.parse(localStorage.getItem('userId'));
@@ -71,6 +72,10 @@ const SocketProvider = ({ children }) => {
 
   socket.on('newMessage', (message) => {
     store.dispatch(addMessage(message));
+  });
+
+  socket.on('newChannel', (channel) => {
+    store.dispatch(addChannel(channel));
   });
 
   return (
