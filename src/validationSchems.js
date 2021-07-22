@@ -26,3 +26,10 @@ export const signUpSchema = yup.object({
   password,
   passwordConfirmation,
 });
+
+export const blacklistSchemaBuilder = (fieldName, blacklist) => {
+  console.log(blacklist);
+  return yup.object({
+    [fieldName]: yup.string().required('This is required field').notOneOf(blacklist, 'Channel name must be uniq'),
+  });
+};

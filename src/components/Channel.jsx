@@ -11,7 +11,7 @@ const availableColors = ['primary', 'secondary', 'success', 'danger', 'dark'];
 const calculateColor = (id) => availableColors[id % availableColors.length];
 
 const ChannelButton = ({ channel, currentChannelId, onSelectChannel }) => {
-  const channelLabel = channel.name?.[0].toUpperCase();
+  const channelLabel = channel.name?.[0]?.toUpperCase();
 
   const channelClasses = cn(
     'w-100 btn border-top-0 border-end-0 border-bottom-0 border-2 rounded-0 d-flex align-items-center',

@@ -1,18 +1,26 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 
+import cn from 'classnames';
+
 import { Formik, Form, Field } from 'formik';
+import { useSelector } from 'react-redux';
 import { SocketContext } from '../../contexts/index.js';
+
+import { blacklistSchemaBuilder } from '../../validationSchems.js';
 
 const AddChannel = ({ onHide }) => {
   const addChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = React.useContext(SocketContext);
 
+  const allChannels = useSelector((state) => state.channelsInfo.channels);
+
   React.useEffect(() => {
     addChannelRef.current.focus();
   }, []);
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
+    console.log('submit');
     const channel = {
       name: values['add-channel'],
     };
@@ -31,6 +39,10 @@ const AddChannel = ({ onHide }) => {
     ));
   };
 
+  const buildInputClassName = (error) => cn('form-control rounded-pill', {
+    'is-invalid': error,
+  });
+
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
@@ -39,44 +51,56 @@ const AddChannel = ({ onHide }) => {
       <Modal.Body>
         <Formik
           initialValues={{ 'add-channel': '' }}
+          validationSchema={blacklistSchemaBuilder('add-channel', allChannels.map((channel) => channel.name))}
           validateOnChange={false}
           validateOnBlur={false}
           onSubmit={handleSubmit}
         >
-          {(props) => (
-            <Form>
-              <div className="row g-3">
-                <div className="col-12">
-                  <label className="visually-hidden" htmlFor="add-channel">
-                    Channel name
-                  </label>
-                  <Field
-                    className="form-control rounded-pill"
-                    id="add-channel"
-                    name="add-channel"
-                    type="text"
-                    innerRef={addChannelRef}
-                  />
+          {(props) => {
+            if (!props.isValid) {
+              addChannelRef.current.focus();
+            }
+
+            return (
+              <Form>
+                <div className="row g-3">
+                  <div className="col-12">
+                    <label className="visually-hidden" htmlFor="add-channel">
+                      Channel name
+                    </label>
+                    <Field
+                      className={buildInputClassName(props.errors['add-channel'])}
+                      id="add-channel"
+                      name="add-channel"
+                      type="text"
+                      innerRef={addChannelRef}
+                    />
+                    {
+                      (props.errors['add-channel'])
+                        ? <div className="invalid-feedback small">{props.errors['add-channel']}</div>
+                        : null
+                    }
+                  </div>
+                  <div className="col-12 text-end">
+                    <button
+                      className="btn btn-secondary rounded-pill"
+                      type="button"
+                      onClick={onHide}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="btn btn-primary rounded-pill ms-2"
+                      type="submit"
+                      disabled={props.isSubmitting}
+                    >
+                      Submit
+                    </button>
+                  </div>
                 </div>
-                <div className="col-12 text-end">
-                  <button
-                    className="btn btn-secondary rounded-pill"
-                    type="button"
-                    onClick={onHide}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary rounded-pill ms-2"
-                    type="submit"
-                    disabled={props.isSubmitting}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
+              </Form>
+            );
+          }}
         </Formik>
       </Modal.Body>
     </Modal>

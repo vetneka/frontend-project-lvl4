@@ -4,9 +4,13 @@ import { useSelector } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
 
+import cn from 'classnames';
+
 import { SocketContext } from '../../contexts/index.js';
 
 import { selectChannelById } from '../../slices/channelsInfoSlice.js';
+
+import { blacklistSchemaBuilder } from '../../validationSchems.js';
 
 const RenameChannel = ({ onHide }) => {
   const renameChannelRef = React.useRef();
@@ -14,6 +18,8 @@ const RenameChannel = ({ onHide }) => {
 
   const currentChannelId = useSelector((state) => state.modal.extra.channelId);
   const currentChannel = useSelector((state) => selectChannelById(state, currentChannelId));
+
+  const allChannels = useSelector((state) => state.channelsInfo.channels);
 
   React.useEffect(() => {
     renameChannelRef.current.select();
@@ -39,6 +45,10 @@ const RenameChannel = ({ onHide }) => {
     ));
   };
 
+  const buildInputClassName = (error) => cn('form-control rounded-pill', {
+    'is-invalid': error,
+  });
+
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
@@ -47,44 +57,56 @@ const RenameChannel = ({ onHide }) => {
       <Modal.Body>
         <Formik
           initialValues={{ 'rename-channel': currentChannel.name }}
+          validationSchema={blacklistSchemaBuilder('rename-channel', allChannels.map((channel) => channel.name))}
           validateOnChange={false}
           validateOnBlur={false}
           onSubmit={handleSubmit}
         >
-          {(props) => (
-            <Form>
-              <div className="row g-3">
-                <div className="col-12">
-                  <label className="visually-hidden" htmlFor="rename-channel">
-                    Channel name
-                  </label>
-                  <Field
-                    className="form-control rounded-pill"
-                    id="rename-channel"
-                    name="rename-channel"
-                    type="text"
-                    innerRef={renameChannelRef}
-                  />
+          {(props) => {
+            if (!props.isValid) {
+              renameChannelRef.current.focus();
+            }
+
+            return (
+              <Form>
+                <div className="row g-3">
+                  <div className="col-12">
+                    <label className="visually-hidden" htmlFor="rename-channel">
+                      Channel name
+                    </label>
+                    <Field
+                      className={buildInputClassName(props.errors['rename-channel'])}
+                      id="rename-channel"
+                      name="rename-channel"
+                      type="text"
+                      innerRef={renameChannelRef}
+                    />
+                    {
+                      (props.errors['rename-channel'])
+                        ? <div className="invalid-feedback small">{props.errors['rename-channel']}</div>
+                        : null
+                    }
+                  </div>
+                  <div className="col-12 text-end">
+                    <button
+                      className="btn btn-secondary rounded-pill"
+                      type="button"
+                      onClick={onHide}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="btn btn-primary rounded-pill ms-2"
+                      type="submit"
+                      disabled={props.isSubmitting}
+                    >
+                      Submit
+                    </button>
+                  </div>
                 </div>
-                <div className="col-12 text-end">
-                  <button
-                    className="btn btn-secondary rounded-pill"
-                    type="button"
-                    onClick={onHide}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary rounded-pill ms-2"
-                    type="submit"
-                    disabled={props.isSubmitting}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
+              </Form>
+            );
+          }}
         </Formik>
       </Modal.Body>
     </Modal>
