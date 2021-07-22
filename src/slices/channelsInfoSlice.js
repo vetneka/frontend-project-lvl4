@@ -12,6 +12,8 @@ const getAuthHeader = () => {
   };
 };
 
+const defaultChannelId = 1;
+
 const channelsInfoSlice = createSlice({
   name: 'channelsInfo',
   initialState: {
@@ -30,8 +32,11 @@ const channelsInfoSlice = createSlice({
       state.channels.push(payload);
       state.currentChannelId = payload.id;
     },
+    removeChannel: (state, { payload }) => {
+      state.channels = state.channels.filter((channel) => channel.id !== payload);
+      state.currentChannelId = defaultChannelId;
+    },
     renameChannel: () => {},
-    removeChannel: () => {},
   },
 });
 

@@ -5,12 +5,13 @@ import { Dropdown, ButtonGroup } from 'react-bootstrap';
 import cn from 'classnames';
 
 import { setCurrentChannel } from '../slices/channelsInfoSlice';
+import { openModal } from '../slices/modalSlice';
 
 const availableColors = ['primary', 'secondary', 'success', 'danger', 'dark'];
 const calculateColor = (id) => availableColors[id % availableColors.length];
 
 const ChannelButton = ({ channel, currentChannelId, onSelectChannel }) => {
-  const channelLabel = channel.name[0].toUpperCase();
+  const channelLabel = channel.name?.[0].toUpperCase();
 
   const channelClasses = cn(
     'w-100 btn border-top-0 border-end-0 border-bottom-0 border-2 rounded-0 d-flex align-items-center',
@@ -37,12 +38,16 @@ const ChannelButton = ({ channel, currentChannelId, onSelectChannel }) => {
 
 const Channel = (props) => {
   const { channel, currentChannelId } = props;
-
   const dispatch = useDispatch();
 
   const onSelectChannel = (event) => {
     event.preventDefault();
     dispatch(setCurrentChannel(channel.id));
+  };
+
+  const onRemoveChannel = (id) => (event) => {
+    event.preventDefault();
+    dispatch(openModal({ type: 'removing', extra: { channelId: id } }));
   };
 
   if (!channel.removable) {
@@ -67,7 +72,7 @@ const Channel = (props) => {
 
       <Dropdown.Menu>
         <Dropdown.Item href="#/action-1">Rename</Dropdown.Item>
-        <Dropdown.Item className="bg-danger text-white" href="#/action-2">
+        <Dropdown.Item className="bg-danger text-white" href="#/action-2" onClick={onRemoveChannel(channel.id)}>
           Delete
         </Dropdown.Item>
       </Dropdown.Menu>
