@@ -17,7 +17,7 @@ import {
 import { Header, Main, Footer } from './components/index.js';
 import { AuthContext, SocketContext } from './contexts/index.js';
 
-import { addChannel, removeChannel } from './slices/channelsInfoSlice.js';
+import { addChannel, removeChannel, renameChannel } from './slices/channelsInfoSlice.js';
 import { addMessage } from './slices/messagesInfoSlice.js';
 
 const checkUserToken = () => JSON.parse(localStorage.getItem('userId'));
@@ -80,6 +80,10 @@ const SocketProvider = ({ children }) => {
 
   socket.on('removeChannel', ({ id }) => {
     store.dispatch(removeChannel(id));
+  });
+
+  socket.on('renameChannel', (channel) => {
+    store.dispatch(renameChannel(channel));
   });
 
   return (

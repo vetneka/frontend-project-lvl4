@@ -50,6 +50,11 @@ const Channel = (props) => {
     dispatch(openModal({ type: 'removing', extra: { channelId: id } }));
   };
 
+  const onRenameChannel = (id) => (event) => {
+    event.preventDefault();
+    dispatch(openModal({ type: 'renaming', extra: { channelId: id } }));
+  };
+
   if (!channel.removable) {
     return (
       <ChannelButton
@@ -71,8 +76,8 @@ const Channel = (props) => {
       <Dropdown.Toggle split variant="white" id="dropdown-split-basic" />
 
       <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Rename</Dropdown.Item>
-        <Dropdown.Item className="bg-danger text-white" href="#/action-2" onClick={onRemoveChannel(channel.id)}>
+        <Dropdown.Item onClick={onRenameChannel(channel.id)}>Rename</Dropdown.Item>
+        <Dropdown.Item className="bg-danger text-white" onClick={onRemoveChannel(channel.id)}>
           Delete
         </Dropdown.Item>
       </Dropdown.Menu>
