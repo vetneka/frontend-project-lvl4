@@ -19,10 +19,6 @@ const getAuthHeader = () => {
 };
 
 const Home = () => {
-  // const [modalInfo, setModalInfo] = React.useState({
-  //   type: null,
-  // });
-
   const modalType = useSelector((state) => state.modal.type);
 
   const currentUser = JSON.parse(localStorage.getItem('userId'));
@@ -103,8 +99,8 @@ const Home = () => {
 
         <div className="col-9 h-100">
           <div className="h-100 d-flex flex-column">
-            <div className="shadow mb-3 px-3 py-1 rounded-pill">
-              <span className="fs-6 me-2">
+            <div className="shadow mb-3 px-3 py-1 rounded-pill d-flex flex-wrap align-items-center">
+              <span className="fs-6 me-2 text-truncate">
                 #
                 {activeChannel.name}
               </span>
