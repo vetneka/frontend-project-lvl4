@@ -38,7 +38,7 @@
   &--github {
     background-image: url("./icon-github.png");
   }
-  
+
   &--hexlet {
     background-image: url("./icon-hexlet.png");
   }
@@ -60,7 +60,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: $light;
-  font-size: $h5-font-size;
+  font-size: $h6-font-size;
 }
 
 .message {
@@ -110,4 +110,22 @@
 
 .message__avatar {
   background-color: $success;
+}
+
+.channels-col {
+  width: 100%;
+
+  .navbar-collapse {
+    max-height: 100px;
+    overflow: auto;
+  }
+
+  @include media-breakpoint-up(md) {
+    max-width: 186px;
+    height: 100%;
+
+    .navbar-collapse {
+      max-height: initial;
+    }
+  }
 }
