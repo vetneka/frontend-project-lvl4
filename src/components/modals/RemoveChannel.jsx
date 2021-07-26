@@ -3,10 +3,10 @@ import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { Formik, Form } from 'formik';
-import { SocketContext } from '../../contexts/index.js';
+import { useSocket } from '../../hooks/index.js';
 
 const RemoveChannel = ({ onHide }) => {
-  const { socket, acknowledgeWithTimeout } = React.useContext(SocketContext);
+  const { socket, acknowledgeWithTimeout } = useSocket();
   const channelId = useSelector((state) => state.modal.extra.channelId);
 
   const handleSubmit = (values, { setSubmitting }) => {

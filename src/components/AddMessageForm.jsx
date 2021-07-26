@@ -1,18 +1,18 @@
 import React from 'react';
 
 import { Formik, Form, Field } from 'formik';
-import { SocketContext } from '../contexts/index.js';
+import { useSocket } from '../hooks/index.js';
 
 const AddMessageForm = (props) => {
-  const { currentChannelId, currentUser } = props;
-  const { socket, acknowledgeWithTimeout } = React.useContext(SocketContext);
+  const { currentChannelId, currentUsername } = props;
+  const { socket, acknowledgeWithTimeout } = useSocket();
   const messageInputRef = React.useRef();
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const message = {
       body: values.message,
       channelId: currentChannelId,
-      username: currentUser.username,
+      username: currentUsername,
     };
 
     setSubmitting(true);

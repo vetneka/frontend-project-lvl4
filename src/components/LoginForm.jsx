@@ -1,32 +1,37 @@
 import React from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
 
-import {
-  Formik, Form, Field,
-} from 'formik';
+import { Formik } from 'formik';
+import { Form, Button } from 'react-bootstrap';
+
 import axios from 'axios';
-
-import cn from 'classnames';
-
-import { AuthContext } from '../contexts/index.js';
 import routes from '../routes';
 
 import { loginSchema } from '../validationSchems.js';
-
-const buildInputClassName = (error) => cn('form-control rounded-pill', {
-  'is-invalid': error,
-});
+import { useAuth } from '../hooks/index.js';
 
 const LoginForm = () => {
   const usernameRef = React.useRef();
-  const { logIn } = React.useContext(AuthContext);
-
-  const history = useHistory();
-  const location = useLocation();
+  const { logIn } = useAuth();
 
   React.useEffect(() => {
     usernameRef.current.focus();
   }, []);
+
+  const handleSubmitForm = async (values, props) => {
+    try {
+      const response = await axios.post(routes.loginPath(), values);
+
+      logIn(response.data);
+    } catch (error) {
+      const { isAxiosError, response: { status } } = error;
+
+      if (isAxiosError && status === 401) {
+        props.setErrors({ username: true, password: 'Invalid name or password' });
+        props.setValues({ ...values, password: '' });
+        usernameRef.current.select();
+      }
+    }
+  };
 
   return (
     <Formik
@@ -37,57 +42,54 @@ const LoginForm = () => {
       validationSchema={loginSchema}
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={async (values, props) => {
-        try {
-          const { from } = location.state || { from: { pathname: '/' } };
-          const response = await axios.post(routes.loginPath(), values);
-
-          logIn(response.data);
-          history.replace(from);
-        } catch (error) {
-          const { isAxiosError, response: { status } } = error;
-
-          if (isAxiosError && status === 401) {
-            props.setErrors({ username: true, password: 'Invalid name or password' });
-            props.setValues({ ...values, password: '' });
-            usernameRef.current.select();
-          }
-        }
-      }}
+      onSubmit={handleSubmitForm}
     >
-      {(props) => (
-        <Form className="row g-3">
-          <h1 className="h2 mb-0 text-center">Sign in</h1>
+      {({
+        handleSubmit, handleChange, values, errors, isSubmitting,
+      }) => (
+        <Form noValidate onSubmit={handleSubmit}>
+          <h1 className="h2 mb-3 text-center">Sign in</h1>
 
-          <div className="col-12 position-relative">
-            <label className="form-label ps-3" htmlFor="username">Username</label>
-            <Field className={buildInputClassName(props.errors.username)} id="username" name="username" type="text" innerRef={usernameRef} />
-            {
-              (props.errors.username)
-                ? <div className="invalid-feedback small">{props.errors.username}</div>
-                : null
-            }
-          </div>
+          <Form.Group className="mb-3" controlId="formGroupUsername">
+            <Form.Label className="mb-1 ps-3 small">Username</Form.Label>
+            <Form.Control
+              className="rounded-pill"
+              type="text"
+              name="username"
+              onChange={handleChange}
+              value={values.username}
+              isInvalid={!!errors.username}
+              placeholder="Type you name..."
+              ref={usernameRef}
+            />
+            <Form.Control.Feedback type="invalid" className="ps-3">
+              {errors.username}
+            </Form.Control.Feedback>
+          </Form.Group>
 
-          <div className="col-12 position-relative">
-            <label className="form-label ps-3" htmlFor="password">Password</label>
-            <Field className={buildInputClassName(props.errors.password)} id="password" name="password" type="password" />
-            {
-              (props.errors.password)
-                ? <div className="invalid-feedback small">{props.errors.password}</div>
-                : null
-            }
-          </div>
+          <Form.Group className="mb-4" controlId="formGroupPassword">
+            <Form.Label className="mb-1 ps-3 small">Password</Form.Label>
+            <Form.Control
+              className="rounded-pill"
+              type="password"
+              name="password"
+              onChange={handleChange}
+              value={values.password}
+              isInvalid={!!errors.password}
+              placeholder="Type you password..."
+            />
+            <Form.Control.Feedback type="invalid" className="ps-3">
+              {errors.password}
+            </Form.Control.Feedback>
+          </Form.Group>
 
-          <div className="col-12 text-center">
-            <button
-              className="btn btn-primary rounded-pill"
-              type="submit"
-              disabled={props.isSubmitting}
-            >
-              Sign in
-            </button>
-          </div>
+          <Button
+            type="submit"
+            className="w-100 rounded-pill"
+            disabled={isSubmitting}
+          >
+            Sign in
+          </Button>
         </Form>
       )}
     </Formik>

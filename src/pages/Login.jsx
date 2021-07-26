@@ -6,15 +6,17 @@ import { LoginForm } from '../components/index.js';
 import bgImgLogin from '../../assets/bg-login.png';
 
 const Login = () => (
-  <div className="h-100 d-flex row justify-content-center align-items-center">
-    <div className="col-12 col-md-8">
+  <div className="h-100 row justify-content-center align-items-center">
+    <div className="col-10 col-lg-8 col-xl-6">
       <div className="card">
-        <div className="card-body row g-5 p-sm-5">
-          <div className="col-6 mx-auto d-flex align-items-center overflow-hidden">
-            <img className="img-fluid" src={bgImgLogin} alt="Login" />
-          </div>
-          <div className="col-12 col-md-6">
-            <LoginForm />
+        <div className="card-body">
+          <div className="row justify-content-center">
+            <div className="col-6 d-flex align-items-center justify-content-center overflow-hidden">
+              <img className="img-fluid" src={bgImgLogin} alt="Sign in" />
+            </div>
+            <div className="col-12 col-md-6">
+              <LoginForm />
+            </div>
           </div>
         </div>
         <div className="card-footer text-center py-3">

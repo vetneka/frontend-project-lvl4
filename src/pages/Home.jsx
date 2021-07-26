@@ -12,13 +12,9 @@ import { Message, AddMessageForm } from '../components/index.js';
 import { setInitialState, selectChannelById, setCurrentChannel } from '../slices/channelsInfoSlice';
 import { openModal, closeModal } from '../slices/modalSlice';
 
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
+import { useAuth } from '../hooks/index.js';
 
-  return {
-    Authorization: `Bearer ${userId.token}`,
-  };
-};
+import getAuthHeader from '../getAuthHeader.js';
 
 const Avatar = ({ colorIndex, name, className = '' }) => {
   const availableColors = ['primary', 'secondary', 'success', 'danger', 'dark'];
@@ -37,7 +33,8 @@ const Avatar = ({ colorIndex, name, className = '' }) => {
 const Home = () => {
   const modalType = useSelector((state) => state.modal.type);
 
-  const currentUser = JSON.parse(localStorage.getItem('userId'));
+  const { authedUser } = useAuth();
+
   const [pageState, setPageState] = React.useState('pending');
 
   const { channels, currentChannelId } = useSelector((state) => state.channelsInfo);
@@ -48,6 +45,7 @@ const Home = () => {
   });
   const dispatch = useDispatch();
   const messagesContainerRef = React.useRef();
+  const channelsContainerRef = React.useRef();
 
   const onHideModal = () => {
     dispatch(closeModal());
@@ -121,7 +119,7 @@ const Home = () => {
 
           <Navbar.Toggle aria-controls="navbarScroll" className="ms-3" />
 
-          <Navbar.Collapse id="navbarScroll" className="w-100 overflow-auto">
+          <Navbar.Collapse id="navbarScroll" className="w-100 overflow-auto" ref={channelsContainerRef}>
             <Nav className="h-100 mr-auto my-2 my-lg-0 flex-md-column w-100" activeKey={currentChannelId} onSelect={onSelectChannel}>
               {channels.map((channel, index) => {
                 if (!channel.removable) {
@@ -178,7 +176,7 @@ const Home = () => {
               {messages.map((message) => (
                 <li className="text-break mb-4" key={message.id}>
                   <Message
-                    currentUsername={currentUser.username}
+                    currentUsername={authedUser.username}
                     username={message.username}
                     body={message.body}
                   />
@@ -188,7 +186,10 @@ const Home = () => {
           </div>
 
           <div className="chat__footer mt-auto pt-2">
-            <AddMessageForm currentUser={currentUser} currentChannelId={currentChannelId} />
+            <AddMessageForm
+              currentUsername={authedUser.username}
+              currentChannelId={currentChannelId}
+            />
           </div>
         </div>
       </div>

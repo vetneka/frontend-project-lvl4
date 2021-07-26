@@ -1,49 +1,123 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
 
-import TextInput from './TextInput.jsx';
+import { Formik } from 'formik';
+import { Form, Button } from 'react-bootstrap';
+
+import axios from 'axios';
+import routes from '../routes.js';
+
 import { signUpSchema } from '../validationSchems.js';
+import { useAuth } from '../hooks/index.js';
 
-const SignUpForm = () => (
-  <Formik
-    initialValues={{
-      username: '',
-      password: '',
-      passwordConfirmation: '',
-    }}
-    validationSchema={signUpSchema}
-    onSubmit={(values) => {
-      console.log(values);
-    }}
-  >
-    {(props) => (
-      <Form className="row g-3">
-        <h1 className="h2 mb-0 text-center">Sign up</h1>
+const SignUpForm = () => {
+  const usernameRef = React.useRef();
+  const { logIn } = useAuth();
 
-        <div className="col-12 position-relative">
-          <TextInput type="text" label="Name" name="username" placeholder="Type you name..." />
-        </div>
+  React.useEffect(() => {
+    usernameRef.current.focus();
+  }, []);
 
-        <div className="col-12 position-relative">
-          <TextInput type="password" label="Password" name="password" placeholder="Type you password..." />
-        </div>
+  const handleSubmitForm = async (values, props) => {
+    try {
+      const response = await axios.post(routes.signupPath(), values);
 
-        <div className="col-12 mb-3 position-relative">
-          <TextInput type="password" label="Password confirm" name="passwordConfirmation" placeholder="Repeat you password..." />
-        </div>
+      logIn(response.data);
+    } catch (error) {
+      const { isAxiosError, response: { status } } = error;
 
-        <div className="col-12 text-center">
-          <button
-            className="btn btn-primary rounded-pill"
+      if (isAxiosError && status === 409) {
+        props.resetForm();
+        props.setErrors({ username: 'Such a user already exists' });
+        props.setValues({ ...values, password: '', passwordConfirmation: '' });
+        usernameRef.current.select();
+      }
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={{
+        username: '',
+        password: '',
+        passwordConfirmation: '',
+      }}
+      validationSchema={signUpSchema}
+      validateOnChange={false}
+      validateOnBlur={false}
+      onSubmit={handleSubmitForm}
+    >
+      {({
+        handleSubmit, handleChange, values, errors, isSubmitting, touched,
+      }) => (
+        <Form noValidate onSubmit={handleSubmit}>
+          <h1 className="h2 mb-3 text-center">Sign up</h1>
+
+          <Form.Group className="mb-3" controlId="formGroupUsername">
+            <Form.Label className="mb-1 ps-3 small">Username</Form.Label>
+            <Form.Control
+              className="rounded-pill"
+              type="text"
+              name="username"
+              onChange={handleChange}
+              value={values.username}
+              isValid={touched.username && !errors.username}
+              isInvalid={!!errors.username}
+              placeholder="Type you name..."
+              ref={usernameRef}
+            />
+            <Form.Control.Feedback type="invalid" className="ps-3">
+              {errors.username}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formGroupPassword">
+            <Form.Label className="mb-1 ps-3 small">Password</Form.Label>
+            <Form.Control
+              className="rounded-pill"
+              type="password"
+              name="password"
+              onChange={handleChange}
+              value={values.password}
+              isValid={touched.password && !errors.password}
+              isInvalid={!!errors.password}
+              placeholder="Type you password..."
+            />
+            <Form.Control.Feedback type="invalid" className="ps-3">
+              {errors.password}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group
+            className="mb-4"
+            controlId="formGroupPasswordConfirmation"
+          >
+            <Form.Label className="mb-1 ps-3 small">Password confirmation</Form.Label>
+            <Form.Control
+              className="rounded-pill"
+              type="password"
+              name="passwordConfirmation"
+              onChange={handleChange}
+              value={values.passwordConfirmation}
+              isValid={touched.passwordConfirmation && !errors.passwordConfirmation}
+              isInvalid={!!errors.passwordConfirmation}
+              placeholder="Repeat you password..."
+            />
+            <Form.Control.Feedback type="invalid" className="ps-3">
+              {errors.passwordConfirmation}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Button
             type="submit"
-            disabled={!props.isValid}
+            className="w-100 rounded-pill"
+            disabled={isSubmitting}
           >
             Sign up
-          </button>
-        </div>
-      </Form>
-    )}
-  </Formik>
-);
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  );
+};
 
 export default SignUpForm;

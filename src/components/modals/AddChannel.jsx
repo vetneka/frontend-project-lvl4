@@ -5,13 +5,13 @@ import cn from 'classnames';
 
 import { Formik, Form, Field } from 'formik';
 import { useSelector } from 'react-redux';
-import { SocketContext } from '../../contexts/index.js';
 
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
+import { useSocket } from '../../hooks/index.js';
 
 const AddChannel = ({ onHide }) => {
   const addChannelRef = React.useRef();
-  const { socket, acknowledgeWithTimeout } = React.useContext(SocketContext);
+  const { socket, acknowledgeWithTimeout } = useSocket();
 
   const allChannels = useSelector((state) => state.channelsInfo.channels);
 
@@ -20,7 +20,6 @@ const AddChannel = ({ onHide }) => {
   }, []);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    console.log('submit');
     const channel = {
       name: values['add-channel'],
     };

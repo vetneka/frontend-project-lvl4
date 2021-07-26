@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useLocation, useHistory,
 } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
@@ -15,38 +16,65 @@ import {
   Home, Login, SignUp, NotFound,
 } from './pages/index.js';
 import { Header, Main, Footer } from './components/index.js';
-import { AuthContext, SocketContext } from './contexts/index.js';
+import { authContext, socketContext } from './contexts/index.js';
 
 import { addChannel, removeChannel, renameChannel } from './slices/channelsInfoSlice.js';
 import { addMessage } from './slices/messagesInfoSlice.js';
+import { useAuth } from './hooks/index.js';
 
-const checkUserToken = () => JSON.parse(localStorage.getItem('userId'));
+const getAuthedUser = () => {
+  const authedUser = localStorage.getItem('userId');
+  return (authedUser)
+    ? JSON.parse(authedUser)
+    : {};
+};
 
 const AuthProvider = ({ children }) => {
-  const logIn = async (data) => {
+  const authedUser = getAuthedUser();
+
+  const [loggedIn, setLoggedIn] = React.useState(!!authedUser.token);
+
+  const history = useHistory();
+  const location = useLocation();
+
+  const logIn = (data) => {
+    const { from } = location.state || { from: { pathname: '/' } };
+
     localStorage.setItem('userId', JSON.stringify(data));
+    setLoggedIn(true);
+    history.replace(from);
   };
 
   const logOut = () => {
+    const { from } = location.state || { from: { pathname: '/login' } };
     localStorage.removeItem('userId');
+    setLoggedIn(false);
+    history.push(from);
   };
 
   return (
-    <AuthContext.Provider value={{ logIn, logOut }}>
+    <authContext.Provider value={{
+      authedUser, loggedIn, logIn, logOut,
+    }}
+    >
       {children}
-    </AuthContext.Provider>
+    </authContext.Provider>
   );
 };
 
-const PrivateRoute = ({ children, path }) => (
-  <Route path={path}>
-    {
-        (checkUserToken())
+const PrivateRoute = ({ children, path }) => {
+  const { authedUser } = useAuth();
+
+  return (
+    <Route path={path}>
+      {
+        (authedUser.token)
           ? children
           : <Redirect to="/login" />
       }
-  </Route>
-);
+    </Route>
+  );
+};
 
 const SocketProvider = ({ children }) => {
   const socket = io();
@@ -87,41 +115,39 @@ const SocketProvider = ({ children }) => {
   });
 
   return (
-    <SocketContext.Provider value={{ socket, acknowledgeWithTimeout }}>
+    <socketContext.Provider value={{ socket, acknowledgeWithTimeout }}>
       {children}
-    </SocketContext.Provider>
+    </socketContext.Provider>
   );
 };
 
 const App = () => (
-  <>
-    <Provider store={store}>
-      <SocketProvider>
-        <AuthProvider>
-          <Header />
+  <Provider store={store}>
+    <SocketProvider>
+      <AuthProvider>
+        <Header />
 
-          <Main>
-            <Switch>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/signup">
-                <SignUp />
-              </Route>
-              <PrivateRoute exact path="/">
-                <Home />
-              </PrivateRoute>
-              <Route path="*">
-                <NotFound />
-              </Route>
-            </Switch>
-          </Main>
+        <Main>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/signup">
+              <SignUp />
+            </Route>
+            <PrivateRoute exact path="/">
+              <Home />
+            </PrivateRoute>
+            <Route path="*">
+              <NotFound />
+            </Route>
+          </Switch>
+        </Main>
 
-          <Footer />
-        </AuthProvider>
-      </SocketProvider>
-    </Provider>
-  </>
+        <Footer />
+      </AuthProvider>
+    </SocketProvider>
+  </Provider>
 );
 
 export default App;

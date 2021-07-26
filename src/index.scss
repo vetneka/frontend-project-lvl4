@@ -26,13 +26,19 @@
 }
 
 .fs-dwarf {
-  font-size: 0.675em;
+  &-1 {
+    font-size: 0.7em;
+  }
+
+  &-2 {
+    font-size: 0.475em;
+  }
 }
 
 .icon {
   display: block;
-  width: 27px;
-  height: 27px;
+  width: 20px;
+  height: 20px;
   background: $light no-repeat center / cover;
 
   &--github {

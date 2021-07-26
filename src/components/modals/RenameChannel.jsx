@@ -6,15 +6,14 @@ import { Formik, Form, Field } from 'formik';
 
 import cn from 'classnames';
 
-import { SocketContext } from '../../contexts/index.js';
-
 import { selectChannelById } from '../../slices/channelsInfoSlice.js';
 
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
+import { useSocket } from '../../hooks/index.js';
 
 const RenameChannel = ({ onHide }) => {
   const renameChannelRef = React.useRef();
-  const { socket, acknowledgeWithTimeout } = React.useContext(SocketContext);
+  const { socket, acknowledgeWithTimeout } = useSocket();
 
   const currentChannelId = useSelector((state) => state.modal.extra.channelId);
   const currentChannel = useSelector((state) => selectChannelById(state, currentChannelId));
