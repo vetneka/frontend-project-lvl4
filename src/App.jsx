@@ -7,6 +7,8 @@ import {
   useLocation, useHistory,
 } from 'react-router-dom';
 
+import './i18n';
+
 import { Provider as RollbarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 
 import { Provider } from 'react-redux';
@@ -78,9 +80,7 @@ const PrivateRoute = ({ children, path }) => {
   );
 };
 
-const SocketProvider = ({ children }) => {
-  const socket = io();
-
+const SocketProvider = ({ socket, children }) => {
   const acknowledgeWithTimeout = (onSuccess, onTimeout, timeout) => {
     const status = {
       isCalled: false,
@@ -123,56 +123,57 @@ const SocketProvider = ({ children }) => {
   );
 };
 
-// same configuration you would create for the Rollbar.js SDK
-const rollbarConfig = {
-  accessToken: "f9608de6d0864fa88ad84bbc5b90d869",
-  captureUncaught: true,
-  captureUnhandledRejections: true,
-  payload: {
-    environment: 'production',
-    client: {
-      javascript: {
-        source_map_enabled: true,
-        code_version: '0.0.1',
-        guess_uncaught_frames: true,
-      },
-    },
-  },
-};
-
 const ErrorBoundaryPage = () => <NotFound />;
 
-const App = () => (
-  <RollbarProvider config={rollbarConfig}>
-    <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
-      <Provider store={store}>
-        <SocketProvider>
-          <AuthProvider>
-            <Header />
+const App = (socketClient = io()) => {
+  const rollbarConfig = {
+    accessToken: "f9608de6d0864fa88ad84bbc5b90d869",
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+    payload: {
+      environment: 'production',
+      client: {
+        javascript: {
+          source_map_enabled: true,
+          code_version: '0.0.1',
+          guess_uncaught_frames: true,
+        },
+      },
+    },
+  };
 
-            <Main>
-              <Switch>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/signup">
-                  <SignUp />
-                </Route>
-                <PrivateRoute exact path="/">
-                  <Home />
-                </PrivateRoute>
-                <Route path="*">
-                  <NotFound />
-                </Route>
-              </Switch>
-            </Main>
+  return (
+    <RollbarProvider config={rollbarConfig}>
+      <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
+        <Provider store={store}>
+          <SocketProvider socket={socketClient}>
+            <AuthProvider>
+              <Header />
 
-            <Footer />
-          </AuthProvider>
-        </SocketProvider>
-      </Provider>
-    </ErrorBoundary>
-  </RollbarProvider>
-);
+              <Main>
+                <Switch>
+                  <Route path="/login">
+                    <Login />
+                  </Route>
+                  <Route path="/signup">
+                    <SignUp />
+                  </Route>
+                  <PrivateRoute exact path="/">
+                    <Home />
+                  </PrivateRoute>
+                  <Route path="*">
+                    <NotFound />
+                  </Route>
+                </Switch>
+              </Main>
+
+              <Footer />
+            </AuthProvider>
+          </SocketProvider>
+        </Provider>
+      </ErrorBoundary>
+    </RollbarProvider>
+  );
+};
 
 export default App;

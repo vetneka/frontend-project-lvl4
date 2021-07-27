@@ -62,6 +62,7 @@ const AddMessageForm = (props) => {
                 type="text"
                 disabled={formikProps.isSubmitting}
                 placeholder={t('chat.placeholder')}
+                data-testid="new-message"
               />
               <button className="btn btn-primary rounded-pill" type="submit" disabled={isSubmitDisabled}>{t('common.send')}</button>
             </div>

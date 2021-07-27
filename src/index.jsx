@@ -11,11 +11,9 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './App.jsx';
 
-import './i18n';
-
 ReactDOM.render(
   <Router>
-    <App />
+    {App()}
   </Router>,
   document.getElementById('chat'),
 );

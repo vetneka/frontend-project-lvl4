@@ -20,6 +20,10 @@ export default {
     },
 
     forms: {
+      login: {
+        label: 'Ваш ник',
+        placeholder: 'Введите ник...',
+      },
       username: {
         label: 'Имя пользователя',
         placeholder: 'Введите имя...',
@@ -35,7 +39,7 @@ export default {
         },
       },
       passwordConfirmation: {
-        label: 'Подтверждение пароля',
+        label: 'Подтвердите пароль',
         placeholder: 'Повторите пароль...',
         validation: {
           match: 'пароли должны совпадать',

@@ -81,6 +81,7 @@ const RenameChannel = ({ onHide }) => {
                       name="rename-channel"
                       type="text"
                       innerRef={renameChannelRef}
+                      data-testid="rename-channel"
                     />
                     {
                       (props.errors['rename-channel'])

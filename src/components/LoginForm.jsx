@@ -53,7 +53,7 @@ const LoginForm = () => {
           <h1 className="h2 mb-3 text-center">{t('login.header')}</h1>
 
           <Form.Group className="mb-3" controlId="formGroupUsername">
-            <Form.Label className="mb-1 ps-3 small">{t('forms.username.label')}</Form.Label>
+            <Form.Label className="mb-1 ps-3 small">{t('forms.login.label')}</Form.Label>
             <Form.Control
               className="rounded-pill"
               type="text"
@@ -61,7 +61,7 @@ const LoginForm = () => {
               onChange={handleChange}
               value={values.username}
               isInvalid={!!errors.username}
-              placeholder={t('forms.username.placeholder')}
+              placeholder={t('forms.login.placeholder')}
               ref={usernameRef}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">

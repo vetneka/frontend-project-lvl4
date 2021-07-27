@@ -75,6 +75,7 @@ const AddChannel = ({ onHide }) => {
                       name="add-channel"
                       type="text"
                       innerRef={addChannelRef}
+                      data-testid="add-channel"
                     />
                     {
                       (props.errors['add-channel'])
