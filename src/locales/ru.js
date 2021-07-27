@@ -3,7 +3,6 @@ export default {
     channels: {
       title: 'Каналы',
       buttons: {
-        addChannel: 'Создать канал',
         rename: 'Переименовать',
         delete: 'Удалить',
       },
@@ -28,27 +27,33 @@ export default {
         label: 'Имя пользователя',
         placeholder: 'Введите имя...',
         validation: {
-          length: 'от 3 до 20 символов',
+          length: 'От 3 до 20 символов',
         },
       },
       password: {
         label: 'Пароль',
         placeholder: 'Введите пароль...',
         validation: {
-          length: 'не менее 6 символов',
+          length: 'Не менее 6 символов',
         },
       },
       passwordConfirmation: {
         label: 'Подтвердите пароль',
         placeholder: 'Повторите пароль...',
         validation: {
-          match: 'пароли должны совпадать',
+          match: 'Пароли должны совпадать',
         },
       },
-      renameChannel: {
+      channel: {
+        label: 'Название',
+        placeholder: 'Введите название...',
         validation: {
           blacklist: 'Канал уже существует',
         },
+      },
+      message: {
+        label: 'Текст сообщения',
+        placeholder: 'Введите сообщение...',
       },
       validation: {
         required: 'Обязательное поле',

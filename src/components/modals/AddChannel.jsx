@@ -1,29 +1,28 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
-
-import cn from 'classnames';
-
-import { Formik, Form, Field } from 'formik';
 import { useSelector } from 'react-redux';
-
 import { useTranslation } from 'react-i18next';
+import { Form, Button, Modal } from 'react-bootstrap';
+
+import { Formik } from 'formik';
+
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
 import { useSocket } from '../../hooks/index.js';
 
 const AddChannel = ({ onHide }) => {
-  const addChannelRef = React.useRef();
+  const inputChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
   const allChannels = useSelector((state) => state.channelsInfo.channels);
+  const channelsNames = allChannels.map((channel) => channel.name);
 
   React.useEffect(() => {
-    addChannelRef.current.focus();
+    inputChannelRef.current.focus();
   }, []);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmitForm = (values, { setSubmitting }) => {
     const channel = {
-      name: values['add-channel'],
+      name: values.name,
     };
 
     setSubmitting(true);
@@ -40,10 +39,6 @@ const AddChannel = ({ onHide }) => {
     ));
   };
 
-  const buildInputClassName = (error) => cn('form-control rounded-pill', {
-    'is-invalid': error,
-  });
-
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
@@ -51,58 +46,55 @@ const AddChannel = ({ onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          initialValues={{ 'add-channel': '' }}
-          validationSchema={blacklistSchemaBuilder('add-channel', allChannels.map((channel) => channel.name))}
+          initialValues={{
+            name: '',
+          }}
+          validationSchema={blacklistSchemaBuilder('name', channelsNames)}
           validateOnChange={false}
           validateOnBlur={false}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitForm}
         >
-          {(props) => {
-            if (!props.isValid) {
-              addChannelRef.current.focus();
-            }
+          {({
+            handleSubmit, handleChange, values, errors, isSubmitting,
+          }) => (
+            <Form noValidate onSubmit={handleSubmit} autoComplete="off">
+              <Form.Group controlId="formGroupNewChannel" className="mb-3">
+                <Form.Label className="visually-hidden">{t('forms.channel.label')}</Form.Label>
+                <Form.Control
+                  className="rounded-pill"
+                  type="text"
+                  name="name"
+                  onChange={handleChange}
+                  value={values.name}
+                  isInvalid={!!errors.name}
+                  placeholder={t('forms.channel.placeholder')}
+                  ref={inputChannelRef}
+                  data-testid="add-channel"
+                />
+                <Form.Control.Feedback type="invalid" className="ps-3">
+                  {errors.name}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-            return (
-              <Form>
-                <div className="row g-3">
-                  <div className="col-12">
-                    <label className="visually-hidden" htmlFor="add-channel">
-                      Channel name
-                    </label>
-                    <Field
-                      className={buildInputClassName(props.errors['add-channel'])}
-                      id="add-channel"
-                      name="add-channel"
-                      type="text"
-                      innerRef={addChannelRef}
-                      data-testid="add-channel"
-                    />
-                    {
-                      (props.errors['add-channel'])
-                        ? <div className="invalid-feedback small">{props.errors['add-channel']}</div>
-                        : null
-                    }
-                  </div>
-                  <div className="col-12 text-end">
-                    <button
-                      className="btn btn-secondary rounded-pill"
-                      type="button"
-                      onClick={onHide}
-                    >
-                      {t('common.cancel')}
-                    </button>
-                    <button
-                      className="btn btn-primary rounded-pill ms-2"
-                      type="submit"
-                      disabled={props.isSubmitting}
-                    >
-                      {t('common.send')}
-                    </button>
-                  </div>
-                </div>
-              </Form>
-            );
-          }}
+              <Form.Group className="text-end">
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={onHide}
+                  className="rounded-pill"
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="rounded-pill ms-2"
+                  disabled={isSubmitting}
+                >
+                  {t('common.send')}
+                </Button>
+              </Form.Group>
+            </Form>
+          )}
         </Formik>
       </Modal.Body>
     </Modal>

@@ -57,12 +57,16 @@ export const {
 } = channelsInfoSlice.actions;
 
 export const setInitialStateThunk = () => async (dispatch) => {
-  try {
-    const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-    dispatch(setInitialState(response.data));
-  } catch (error) {
-    console.dir(error);
-  }
+  const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
+  dispatch(setInitialState(response.data));
 };
+// export const setInitialStateThunk = () => async (dispatch) => {
+//   try {
+//     const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
+//     dispatch(setInitialState(response.data));
+//   } catch (error) {
+//     console.dir(error);
+//   }
+// };
 
 export default channelsInfoSlice.reducer;

@@ -33,5 +33,5 @@ export const blacklistSchemaBuilder = (fieldName, blacklist) => yup.object({
     .string()
     .trim()
     .required(i18n.t('forms.validation.required'))
-    .notOneOf(blacklist, i18n.t('forms.renameChannel.validation.blacklist')),
+    .notOneOf(blacklist, i18n.t('forms.channel.validation.blacklist')),
 });

@@ -128,7 +128,7 @@ const ErrorBoundaryPage = () => <NotFound />;
 
 const App = (socketClient = io()) => {
   const rollbarConfig = {
-    accessToken: "f9608de6d0864fa88ad84bbc5b90d869",
+    accessToken: 'f9608de6d0864fa88ad84bbc5b90d869',
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {

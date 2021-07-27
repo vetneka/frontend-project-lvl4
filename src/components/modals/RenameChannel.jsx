@@ -1,19 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-
-import { Modal } from 'react-bootstrap';
-import { Formik, Form, Field } from 'formik';
-
-import cn from 'classnames';
-
 import { useTranslation } from 'react-i18next';
+import { Form, Button, Modal } from 'react-bootstrap';
+
+import { Formik } from 'formik';
+
 import { selectChannelById } from '../../slices/channelsInfoSlice.js';
 
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
 import { useSocket } from '../../hooks/index.js';
 
 const RenameChannel = ({ onHide }) => {
-  const renameChannelRef = React.useRef();
+  const inputChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
@@ -21,15 +19,16 @@ const RenameChannel = ({ onHide }) => {
   const currentChannel = useSelector((state) => selectChannelById(state, currentChannelId));
 
   const allChannels = useSelector((state) => state.channelsInfo.channels);
+  const channelsNames = allChannels.map((channel) => channel.name);
 
   React.useEffect(() => {
-    renameChannelRef.current.select();
+    inputChannelRef.current.select();
   }, []);
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmitForm = (values, { setSubmitting }) => {
     const renamedChannel = {
       id: currentChannelId,
-      name: values['rename-channel'],
+      name: values.name,
     };
 
     setSubmitting(true);
@@ -46,10 +45,6 @@ const RenameChannel = ({ onHide }) => {
     ));
   };
 
-  const buildInputClassName = (error) => cn('form-control rounded-pill', {
-    'is-invalid': error,
-  });
-
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
@@ -57,58 +52,55 @@ const RenameChannel = ({ onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          initialValues={{ 'rename-channel': currentChannel.name }}
-          validationSchema={blacklistSchemaBuilder('rename-channel', allChannels.map((channel) => channel.name))}
+          initialValues={{
+            name: currentChannel.name,
+          }}
+          validationSchema={blacklistSchemaBuilder('name', channelsNames)}
           validateOnChange={false}
           validateOnBlur={false}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitForm}
         >
-          {(props) => {
-            if (!props.isValid) {
-              renameChannelRef.current.focus();
-            }
+          {({
+            handleSubmit, handleChange, values, errors, isSubmitting,
+          }) => (
+            <Form noValidate onSubmit={handleSubmit} autoComplete="off">
+              <Form.Group controlId="formGroupRenameChannel" className="mb-3">
+                <Form.Label className="visually-hidden">{t('forms.channel.label')}</Form.Label>
+                <Form.Control
+                  className="rounded-pill"
+                  type="text"
+                  name="name"
+                  onChange={handleChange}
+                  value={values.name}
+                  isInvalid={!!errors.name}
+                  placeholder={t('forms.channel.placeholder')}
+                  ref={inputChannelRef}
+                  data-testid="rename-channel"
+                />
+                <Form.Control.Feedback type="invalid" className="ps-3">
+                  {errors.name}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-            return (
-              <Form>
-                <div className="row g-3">
-                  <div className="col-12">
-                    <label className="visually-hidden" htmlFor="rename-channel">
-                      Channel name
-                    </label>
-                    <Field
-                      className={buildInputClassName(props.errors['rename-channel'])}
-                      id="rename-channel"
-                      name="rename-channel"
-                      type="text"
-                      innerRef={renameChannelRef}
-                      data-testid="rename-channel"
-                    />
-                    {
-                      (props.errors['rename-channel'])
-                        ? <div className="invalid-feedback small">{props.errors['rename-channel']}</div>
-                        : null
-                    }
-                  </div>
-                  <div className="col-12 text-end">
-                    <button
-                      className="btn btn-secondary rounded-pill"
-                      type="button"
-                      onClick={onHide}
-                    >
-                      {t('common.cancel')}
-                    </button>
-                    <button
-                      className="btn btn-primary rounded-pill ms-2"
-                      type="submit"
-                      disabled={props.isSubmitting}
-                    >
-                      {t('common.send')}
-                    </button>
-                  </div>
-                </div>
-              </Form>
-            );
-          }}
+              <Form.Group className="text-end">
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={onHide}
+                  className="rounded-pill"
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="rounded-pill ms-2"
+                  disabled={isSubmitting}
+                >
+                  {t('common.send')}
+                </Button>
+              </Form.Group>
+            </Form>
+          )}
         </Formik>
       </Modal.Body>
     </Modal>

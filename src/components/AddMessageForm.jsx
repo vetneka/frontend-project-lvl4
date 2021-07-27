@@ -1,16 +1,18 @@
 import React from 'react';
-
-import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { Form, Button } from 'react-bootstrap';
+
+import { Formik } from 'formik';
+
 import { useSocket } from '../hooks/index.js';
 
 const AddMessageForm = (props) => {
   const { currentChannelId, currentUsername } = props;
+  const inputMessageRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
-  const messageInputRef = React.useRef();
   const { t } = useTranslation();
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
     const message = {
       body: values.message,
       channelId: currentChannelId,
@@ -22,18 +24,18 @@ const AddMessageForm = (props) => {
       () => {
         setSubmitting(false);
         resetForm();
-        messageInputRef.current.focus();
+        inputMessageRef.current.focus();
       },
       () => {
         setSubmitting(false);
-        messageInputRef.current.focus();
+        inputMessageRef.current.focus();
       },
       1000,
     ));
   };
 
   React.useEffect(() => {
-    messageInputRef.current.focus();
+    inputMessageRef.current.focus();
   }, []);
 
   return (
@@ -41,31 +43,40 @@ const AddMessageForm = (props) => {
       initialValues={{
         message: '',
       }}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmitForm}
     >
-      {(formikProps) => {
-        const isSubmitDisabled = formikProps.isSubmitting || formikProps.values.message === '';
+      {({
+        handleSubmit, handleChange, values, isSubmitting,
+      }) => {
+        const isSubmitDisabled = isSubmitting || values.message === '';
 
         // Back door for rollbar ErrorBoundary
-        if (messageInputRef?.current?.value === 'error') {
-          throw new Error('Danger error')
+        if (inputMessageRef?.current?.value === 'error') {
+          throw new Error('Danger error');
         }
 
         return (
-          <Form className="row g-3">
-            <div className="col-12 position-relative d-flex">
-              <Field
-                innerRef={messageInputRef}
-                className="form-control rounded-pill me-2"
-                id="new-message"
-                name="message"
+          <Form noValidate onSubmit={handleSubmit} autoComplete="off">
+            <Form.Group controlId="formGroupNewMessage" className="d-flex">
+              <Form.Label className="visually-hidden">{t('forms.message.label')}</Form.Label>
+              <Form.Control
+                className="rounded-pill"
                 type="text"
-                disabled={formikProps.isSubmitting}
-                placeholder={t('chat.placeholder')}
+                name="message"
+                onChange={handleChange}
+                value={values.message}
+                placeholder={t('forms.message.placeholder')}
+                ref={inputMessageRef}
                 data-testid="new-message"
               />
-              <button className="btn btn-primary rounded-pill" type="submit" disabled={isSubmitDisabled}>{t('common.send')}</button>
-            </div>
+              <Button
+                type="submit"
+                className="rounded-pill ms-2"
+                disabled={isSubmitDisabled}
+              >
+                {t('common.send')}
+              </Button>
+            </Form.Group>
           </Form>
         );
       }}
