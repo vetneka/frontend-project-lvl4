@@ -6,6 +6,7 @@ import { Formik, Form, Field } from 'formik';
 
 import cn from 'classnames';
 
+import { useTranslation } from 'react-i18next';
 import { selectChannelById } from '../../slices/channelsInfoSlice.js';
 
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
@@ -14,6 +15,7 @@ import { useSocket } from '../../hooks/index.js';
 const RenameChannel = ({ onHide }) => {
   const renameChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
+  const { t } = useTranslation();
 
   const currentChannelId = useSelector((state) => state.modal.extra.channelId);
   const currentChannel = useSelector((state) => selectChannelById(state, currentChannelId));
@@ -51,7 +53,7 @@ const RenameChannel = ({ onHide }) => {
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Rename channel</Modal.Title>
+        <Modal.Title>{t('modals.rename.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -92,14 +94,14 @@ const RenameChannel = ({ onHide }) => {
                       type="button"
                       onClick={onHide}
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       className="btn btn-primary rounded-pill ms-2"
                       type="submit"
                       disabled={props.isSubmitting}
                     >
-                      Submit
+                      {t('common.send')}
                     </button>
                   </div>
                 </div>

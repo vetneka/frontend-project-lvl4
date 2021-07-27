@@ -1,34 +1,37 @@
 import * as yup from 'yup';
+import i18n from './i18n.js';
 
 export const loginSchema = yup.object({
   username: yup
     .string()
-    .required('This is required field'),
+    .trim()
+    .required(i18n.t('forms.validation.required')),
   password: yup
     .string()
-    .required('This is required field'),
+    .required(i18n.t('forms.validation.required')),
 });
 
 export const signUpSchema = yup.object({
   username: yup
     .string()
     .trim()
-    .required('This is required field')
-    .min(3, 'Must be from 3 to 20')
-    .max(20, 'Must be from 3 to 20'),
+    .required(i18n.t('forms.validation.required'))
+    .min(3, i18n.t('forms.username.validation.length'))
+    .max(20, i18n.t('forms.username.validation.length')),
   password: yup
     .string()
-    .required('This is required field')
-    .min(6, 'Must be at least 6 characters'),
+    .required(i18n.t('forms.validation.required'))
+    .min(6, i18n.t('forms.password.validation.length')),
   passwordConfirmation: yup
     .string()
-    .required('This is required field')
-    .oneOf([yup.ref('password')], 'Passwords must match'),
+    .required(i18n.t('forms.validation.required'))
+    .oneOf([yup.ref('password')], i18n.t('forms.passwordConfirmation.validation.match')),
 });
 
 export const blacklistSchemaBuilder = (fieldName, blacklist) => yup.object({
   [fieldName]: yup
     .string()
-    .required('This is required field')
-    .notOneOf(blacklist, 'Channel name must be uniq'),
+    .trim()
+    .required(i18n.t('forms.validation.required'))
+    .notOneOf(blacklist, i18n.t('forms.renameChannel.validation.blacklist')),
 });

@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 
 import { signUpSchema } from '../validationSchems.js';
@@ -12,6 +13,7 @@ import { useAuth } from '../hooks/index.js';
 const SignUpForm = () => {
   const usernameRef = React.useRef();
   const { logIn } = useAuth();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     usernameRef.current.focus();
@@ -27,7 +29,7 @@ const SignUpForm = () => {
 
       if (isAxiosError && status === 409) {
         props.resetForm();
-        props.setErrors({ username: 'Such a user already exists' });
+        props.setErrors({ username: t('forms.errors.duplicateUser') });
         props.setValues({ ...values, password: '', passwordConfirmation: '' });
         usernameRef.current.select();
       }
@@ -50,10 +52,10 @@ const SignUpForm = () => {
         handleSubmit, handleChange, values, errors, isSubmitting, touched,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
-          <h1 className="h2 mb-3 text-center">Sign up</h1>
+          <h1 className="h2 mb-3 text-center">{t('signup.header')}</h1>
 
           <Form.Group className="mb-3" controlId="formGroupUsername">
-            <Form.Label className="mb-1 ps-3 small">Username</Form.Label>
+            <Form.Label className="mb-1 ps-3 small">{t('forms.username.label')}</Form.Label>
             <Form.Control
               className="rounded-pill"
               type="text"
@@ -62,7 +64,7 @@ const SignUpForm = () => {
               value={values.username}
               isValid={touched.username && !errors.username}
               isInvalid={!!errors.username}
-              placeholder="Type you name..."
+              placeholder={t('forms.username.placeholder')}
               ref={usernameRef}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
@@ -71,7 +73,7 @@ const SignUpForm = () => {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formGroupPassword">
-            <Form.Label className="mb-1 ps-3 small">Password</Form.Label>
+            <Form.Label className="mb-1 ps-3 small">{t('forms.password.label')}</Form.Label>
             <Form.Control
               className="rounded-pill"
               type="password"
@@ -80,7 +82,7 @@ const SignUpForm = () => {
               value={values.password}
               isValid={touched.password && !errors.password}
               isInvalid={!!errors.password}
-              placeholder="Type you password..."
+              placeholder={t('forms.password.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
               {errors.password}
@@ -91,7 +93,7 @@ const SignUpForm = () => {
             className="mb-4"
             controlId="formGroupPasswordConfirmation"
           >
-            <Form.Label className="mb-1 ps-3 small">Password confirmation</Form.Label>
+            <Form.Label className="mb-1 ps-3 small">{t('forms.passwordConfirmation.label')}</Form.Label>
             <Form.Control
               className="rounded-pill"
               type="password"
@@ -100,7 +102,7 @@ const SignUpForm = () => {
               value={values.passwordConfirmation}
               isValid={touched.passwordConfirmation && !errors.passwordConfirmation}
               isInvalid={!!errors.passwordConfirmation}
-              placeholder="Repeat you password..."
+              placeholder={t('forms.passwordConfirmation.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
               {errors.passwordConfirmation}
@@ -112,7 +114,7 @@ const SignUpForm = () => {
             className="w-100 rounded-pill"
             disabled={isSubmitting}
           >
-            Sign up
+            {t('signup.button')}
           </Button>
         </Form>
       )}

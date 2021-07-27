@@ -3,11 +3,13 @@ import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { Formik, Form } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useSocket } from '../../hooks/index.js';
 
 const RemoveChannel = ({ onHide }) => {
   const { socket, acknowledgeWithTimeout } = useSocket();
   const channelId = useSelector((state) => state.modal.extra.channelId);
+  const { t } = useTranslation();
 
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
@@ -27,7 +29,7 @@ const RemoveChannel = ({ onHide }) => {
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Remove channel</Modal.Title>
+        <Modal.Title>{t('modals.remove.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -38,7 +40,7 @@ const RemoveChannel = ({ onHide }) => {
             <Form>
               <div className="row g-3">
                 <div className="col-12">
-                  Are you absolutely sure?
+                  {t('modals.remove.confirm')}
                 </div>
                 <div className="col-12 text-end">
                   <button
@@ -46,14 +48,14 @@ const RemoveChannel = ({ onHide }) => {
                     type="button"
                     onClick={onHide}
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button
                     className="btn btn-danger rounded-pill ms-2"
                     type="submit"
                     disabled={props.isSubmitting}
                   >
-                    Remove
+                    {t('common.delete')}
                   </button>
                 </div>
               </div>

@@ -6,12 +6,14 @@ import cn from 'classnames';
 import { Formik, Form, Field } from 'formik';
 import { useSelector } from 'react-redux';
 
+import { useTranslation } from 'react-i18next';
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
 import { useSocket } from '../../hooks/index.js';
 
 const AddChannel = ({ onHide }) => {
   const addChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
+  const { t } = useTranslation();
 
   const allChannels = useSelector((state) => state.channelsInfo.channels);
 
@@ -45,7 +47,7 @@ const AddChannel = ({ onHide }) => {
   return (
     <Modal show centered onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Add channel</Modal.Title>
+        <Modal.Title>{t('modals.add.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -86,14 +88,14 @@ const AddChannel = ({ onHide }) => {
                       type="button"
                       onClick={onHide}
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       className="btn btn-primary rounded-pill ms-2"
                       type="submit"
                       disabled={props.isSubmitting}
                     >
-                      Submit
+                      {t('common.send')}
                     </button>
                   </div>
                 </div>

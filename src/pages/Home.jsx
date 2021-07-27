@@ -5,6 +5,7 @@ import {
 } from 'react-bootstrap';
 
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 
 import getModal from '../components/modals/index.js';
@@ -31,6 +32,7 @@ const Avatar = ({ colorIndex, name, className = '' }) => {
 };
 
 const Home = () => {
+  const { t } = useTranslation();
   const modalType = useSelector((state) => state.modal.type);
 
   const { authedUser } = useAuth();
@@ -94,28 +96,26 @@ const Home = () => {
   });
 
   if (pageState === 'pending') {
-    return <div>Channels is loading...</div>;
+    return <div>{t('common.loading')}</div>;
   }
 
   if (pageState === 'rejected') {
-    return <div>Something went wrong :(</div>;
+    return <div>{t('common.error')}</div>;
   }
 
   return (
     <div className="row gx-4 gy-3 h-100">
-      <h1 className="visually-hidden">Chats page</h1>
-
       <div className="channels-col shadow">
         <Navbar className="h-100 flex-md-column" expand="md">
           <Button variant="outline-primary" className="rounded-pill mb-md-3 d-flex align-items-center" onClick={onShowModal('adding')}>
-            <span className="me-2 d-none d-sm-inline  ">Add channel</span>
+            <span className="me-2 d-none d-sm-inline  ">{t('channels.buttons.addChannel')}</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="currentColor">
               <path d="M256 0C114.833 0 0 114.833 0 256s114.833 256 256 256 256-114.853 256-256S397.167 0 256 0zm0 472.341c-119.275 0-216.341-97.046-216.341-216.341S136.725 39.659 256 39.659 472.341 136.705 472.341 256 375.295 472.341 256 472.341z" />
               <path d="M355.148 234.386H275.83v-79.318c0-10.946-8.864-19.83-19.83-19.83s-19.83 8.884-19.83 19.83v79.318h-79.318c-10.966 0-19.83 8.884-19.83 19.83s8.864 19.83 19.83 19.83h79.318v79.318c0 10.946 8.864 19.83 19.83 19.83s19.83-8.884 19.83-19.83v-79.318h79.318c10.966 0 19.83-8.884 19.83-19.83s-8.864-19.83-19.83-19.83z" />
             </svg>
           </Button>
 
-          <h2 className="h5 mb-0 mb-md-2 ms-auto ms-md-0">Channels</h2>
+          <h2 className="h5 mb-0 mb-md-2 ms-auto ms-md-0">{t('channels.title')}</h2>
 
           <Navbar.Toggle aria-controls="navbarScroll" className="ms-3" />
 
@@ -143,8 +143,8 @@ const Home = () => {
                       <Dropdown.Toggle as={NavLink} className="p-2 ms-2" id={`channel-dropdown-${index}`} />
                     </ButtonGroup>
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={onRenameChannel(channel.id)}>Rename</Dropdown.Item>
-                      <Dropdown.Item className="text-danger" onClick={onRemoveChannel(channel.id)}>Delete</Dropdown.Item>
+                      <Dropdown.Item onClick={onRenameChannel(channel.id)}>{t('channels.buttons.rename')}</Dropdown.Item>
+                      <Dropdown.Item className="text-danger" onClick={onRemoveChannel(channel.id)}>{t('channels.buttons.delete')}</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 );
@@ -164,9 +164,8 @@ const Home = () => {
               </span>
               <span className="small text-muted me-2">
                 (
-                {messages.length}
-                {' '}
-                messages)
+                {t('chat.messages', { count: messages.length })}
+                )
               </span>
             </div>
           </div>

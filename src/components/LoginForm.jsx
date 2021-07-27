@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes';
 
 import { loginSchema } from '../validationSchems.js';
@@ -12,6 +13,7 @@ import { useAuth } from '../hooks/index.js';
 const LoginForm = () => {
   const usernameRef = React.useRef();
   const { logIn } = useAuth();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     usernameRef.current.focus();
@@ -26,7 +28,7 @@ const LoginForm = () => {
       const { isAxiosError, response: { status } } = error;
 
       if (isAxiosError && status === 401) {
-        props.setErrors({ username: true, password: 'Invalid name or password' });
+        props.setErrors({ username: true, password: t('forms.errors.login') });
         props.setValues({ ...values, password: '' });
         usernameRef.current.select();
       }
@@ -48,10 +50,10 @@ const LoginForm = () => {
         handleSubmit, handleChange, values, errors, isSubmitting,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
-          <h1 className="h2 mb-3 text-center">Sign in</h1>
+          <h1 className="h2 mb-3 text-center">{t('login.header')}</h1>
 
           <Form.Group className="mb-3" controlId="formGroupUsername">
-            <Form.Label className="mb-1 ps-3 small">Username</Form.Label>
+            <Form.Label className="mb-1 ps-3 small">{t('forms.username.label')}</Form.Label>
             <Form.Control
               className="rounded-pill"
               type="text"
@@ -59,7 +61,7 @@ const LoginForm = () => {
               onChange={handleChange}
               value={values.username}
               isInvalid={!!errors.username}
-              placeholder="Type you name..."
+              placeholder={t('forms.username.placeholder')}
               ref={usernameRef}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
@@ -68,7 +70,7 @@ const LoginForm = () => {
           </Form.Group>
 
           <Form.Group className="mb-4" controlId="formGroupPassword">
-            <Form.Label className="mb-1 ps-3 small">Password</Form.Label>
+            <Form.Label className="mb-1 ps-3 small">{t('forms.password.label')}</Form.Label>
             <Form.Control
               className="rounded-pill"
               type="password"
@@ -76,7 +78,7 @@ const LoginForm = () => {
               onChange={handleChange}
               value={values.password}
               isInvalid={!!errors.password}
-              placeholder="Type you password..."
+              placeholder={t('forms.password.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
               {errors.password}
@@ -88,7 +90,7 @@ const LoginForm = () => {
             className="w-100 rounded-pill"
             disabled={isSubmitting}
           >
-            Sign in
+            {t('login.button')}
           </Button>
         </Form>
       )}

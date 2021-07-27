@@ -1,12 +1,14 @@
 import React from 'react';
 
 import { Formik, Form, Field } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useSocket } from '../hooks/index.js';
 
 const AddMessageForm = (props) => {
   const { currentChannelId, currentUsername } = props;
   const { socket, acknowledgeWithTimeout } = useSocket();
   const messageInputRef = React.useRef();
+  const { t } = useTranslation();
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const message = {
@@ -47,8 +49,16 @@ const AddMessageForm = (props) => {
         return (
           <Form className="row g-3">
             <div className="col-12 position-relative d-flex">
-              <Field innerRef={messageInputRef} className="form-control rounded-pill me-2" id="new-message" name="message" type="text" disabled={formikProps.isSubmitting} />
-              <button className="btn btn-primary rounded-pill" type="submit" disabled={isSubmitDisabled}>Send</button>
+              <Field
+                innerRef={messageInputRef}
+                className="form-control rounded-pill me-2"
+                id="new-message"
+                name="message"
+                type="text"
+                disabled={formikProps.isSubmitting}
+                placeholder={t('chat.placeholder')}
+              />
+              <button className="btn btn-primary rounded-pill" type="submit" disabled={isSubmitDisabled}>{t('common.send')}</button>
             </div>
           </Form>
         );
