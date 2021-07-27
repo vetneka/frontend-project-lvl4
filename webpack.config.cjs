@@ -21,6 +21,7 @@ module.exports = {
     publicPath: '/assets/',
     historyApiFallback: true,
   },
+  devtool: 'source-map',
   plugins: [
     new MiniCssExtractPlugin(),
   ],

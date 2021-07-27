@@ -46,6 +46,11 @@ const AddMessageForm = (props) => {
       {(formikProps) => {
         const isSubmitDisabled = formikProps.isSubmitting || formikProps.values.message === '';
 
+        // Back door for rollbar ErrorBoundary
+        if (messageInputRef?.current?.value === 'error') {
+          throw new Error('Danger error')
+        }
+
         return (
           <Form className="row g-3">
             <div className="col-12 position-relative d-flex">

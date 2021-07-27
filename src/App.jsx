@@ -7,6 +7,8 @@ import {
   useLocation, useHistory,
 } from 'react-router-dom';
 
+import { Provider as RollbarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
+
 import { Provider } from 'react-redux';
 
 import { io } from 'socket.io-client';
@@ -121,33 +123,56 @@ const SocketProvider = ({ children }) => {
   );
 };
 
+// same configuration you would create for the Rollbar.js SDK
+const rollbarConfig = {
+  accessToken: "f9608de6d0864fa88ad84bbc5b90d869",
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  payload: {
+    environment: 'production',
+    client: {
+      javascript: {
+        source_map_enabled: true,
+        code_version: '0.0.1',
+        guess_uncaught_frames: true,
+      },
+    },
+  },
+};
+
+const ErrorBoundaryPage = () => <NotFound />;
+
 const App = () => (
-  <Provider store={store}>
-    <SocketProvider>
-      <AuthProvider>
-        <Header />
+  <RollbarProvider config={rollbarConfig}>
+    <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
+      <Provider store={store}>
+        <SocketProvider>
+          <AuthProvider>
+            <Header />
 
-        <Main>
-          <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
-            <PrivateRoute exact path="/">
-              <Home />
-            </PrivateRoute>
-            <Route path="*">
-              <NotFound />
-            </Route>
-          </Switch>
-        </Main>
+            <Main>
+              <Switch>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="/signup">
+                  <SignUp />
+                </Route>
+                <PrivateRoute exact path="/">
+                  <Home />
+                </PrivateRoute>
+                <Route path="*">
+                  <NotFound />
+                </Route>
+              </Switch>
+            </Main>
 
-        <Footer />
-      </AuthProvider>
-    </SocketProvider>
-  </Provider>
+            <Footer />
+          </AuthProvider>
+        </SocketProvider>
+      </Provider>
+    </ErrorBoundary>
+  </RollbarProvider>
 );
 
 export default App;
