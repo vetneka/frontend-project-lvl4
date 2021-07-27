@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
@@ -143,36 +144,38 @@ const App = (socketClient = io()) => {
   };
 
   return (
-    <RollbarProvider config={rollbarConfig}>
-      <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
-        <Provider store={store}>
-          <SocketProvider socket={socketClient}>
-            <AuthProvider>
-              <Header />
+    <Router>
+      <RollbarProvider config={rollbarConfig}>
+        <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
+          <Provider store={store}>
+            <SocketProvider socket={socketClient}>
+              <AuthProvider>
+                <Header />
 
-              <Main>
-                <Switch>
-                  <Route path="/login">
-                    <Login />
-                  </Route>
-                  <Route path="/signup">
-                    <SignUp />
-                  </Route>
-                  <PrivateRoute exact path="/">
-                    <Home />
-                  </PrivateRoute>
-                  <Route path="*">
-                    <NotFound />
-                  </Route>
-                </Switch>
-              </Main>
+                <Main>
+                  <Switch>
+                    <Route path="/login">
+                      <Login />
+                    </Route>
+                    <Route path="/signup">
+                      <SignUp />
+                    </Route>
+                    <PrivateRoute exact path="/">
+                      <Home />
+                    </PrivateRoute>
+                    <Route path="*">
+                      <NotFound />
+                    </Route>
+                  </Switch>
+                </Main>
 
-              <Footer />
-            </AuthProvider>
-          </SocketProvider>
-        </Provider>
-      </ErrorBoundary>
-    </RollbarProvider>
+                <Footer />
+              </AuthProvider>
+            </SocketProvider>
+          </Provider>
+        </ErrorBoundary>
+      </RollbarProvider>
+    </Router>
   );
 };
 

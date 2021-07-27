@@ -120,7 +120,7 @@ const Home = () => {
           <Navbar.Toggle aria-controls="navbarScroll" className="ms-3" />
 
           <Navbar.Collapse id="navbarScroll" className="w-100 overflow-auto" ref={channelsContainerRef}>
-            <Nav className="h-100 mr-auto my-2 my-lg-0 flex-md-column w-100" activeKey={currentChannelId} onSelect={onSelectChannel}>
+            <Nav className="h-100 mr-auto my-lg-0 flex-md-column w-100" activeKey={currentChannelId} onSelect={onSelectChannel}>
               {channels.map((channel, index) => {
                 if (!channel.removable) {
                   return (
