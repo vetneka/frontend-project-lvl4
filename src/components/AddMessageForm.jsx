@@ -12,7 +12,7 @@ const AddMessageForm = (props) => {
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
-  const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
+  const handleSubmitForm = (values, { setSubmitting, setErrors, resetForm }) => {
     const message = {
       body: values.message,
       channelId: currentChannelId,
@@ -28,23 +28,16 @@ const AddMessageForm = (props) => {
       },
       () => {
         setSubmitting(false);
+        setErrors({ network: 'errors.network'});
         inputMessageRef.current.focus();
       },
-      1000,
+      2000,
     ));
   };
 
   React.useEffect(() => {
-    console.log('input Message')
-    console.log('currentChannelId', currentChannelId)
-    console.log('currentUsername', currentUsername)
     inputMessageRef.current.focus();
-  });
-
-  // React.useEffect(() => {
-  //   console.log('input Message')
-  //   inputMessageRef.current.focus();
-  // }, [currentChannelId]);
+  }, [currentChannelId]);
 
   return (
     <Formik
@@ -54,7 +47,7 @@ const AddMessageForm = (props) => {
       onSubmit={handleSubmitForm}
     >
       {({
-        handleSubmit, handleChange, values, isSubmitting,
+        handleSubmit, handleChange, values, errors, isSubmitting,
       }) => {
         const isSubmitDisabled = isSubmitting || values.message === '';
 
@@ -65,7 +58,7 @@ const AddMessageForm = (props) => {
 
         return (
           <Form noValidate onSubmit={handleSubmit} autoComplete="off">
-            <Form.Group controlId="formGroupNewMessage" className="d-flex">
+            <Form.Group controlId="formGroupNewMessage" className="d-flex position-relative">
               <Form.Label className="visually-hidden">{t('forms.message.label')}</Form.Label>
               <Form.Control
                 className="rounded-pill"
@@ -85,6 +78,9 @@ const AddMessageForm = (props) => {
                 {t('common.send')}
               </Button>
             </Form.Group>
+            <Form.Control.Feedback type="invalid" className="ps-3" style={errors.network && { display: 'block' }}>
+              {errors.network && t(errors.network)}
+            </Form.Control.Feedback>
           </Form>
         );
       }}

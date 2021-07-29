@@ -12,7 +12,7 @@ const RemoveChannel = ({ onHide }) => {
   const channelId = useSelector((state) => state.modal.extra.channelId);
   const { t } = useTranslation();
 
-  const handleSubmitForm = (values, { setSubmitting }) => {
+  const handleSubmitForm = (values, { setSubmitting, setErrors }) => {
     setSubmitting(true);
     socket.emit('removeChannel', { id: values.channelId }, acknowledgeWithTimeout(
       () => {
@@ -21,7 +21,7 @@ const RemoveChannel = ({ onHide }) => {
       },
       () => {
         setSubmitting(false);
-        onHide();
+        setErrors({ network: 'errors.network'});
       },
       1000,
     ));
@@ -37,10 +37,14 @@ const RemoveChannel = ({ onHide }) => {
           initialValues={{ channelId }}
           onSubmit={handleSubmitForm}
         >
-          {(props) => (
-            <Form noValidate onSubmit={props.handleSubmit}>
+          {({ handleSubmit, errors, isSubmitting }) => (
+            <Form noValidate onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
                 <p>{t('modals.remove.confirm')}</p>
+
+                <Form.Control.Feedback type="invalid" style={errors.network && { display: 'block' }}>
+                  {errors.network && t(errors.network)}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="text-end">
@@ -56,7 +60,7 @@ const RemoveChannel = ({ onHide }) => {
                   variant="danger"
                   type="submit"
                   className="rounded-pill ms-2"
-                  disabled={props.isSubmitting}
+                  disabled={isSubmitting}
                 >
                   {t('common.delete')}
                 </Button>

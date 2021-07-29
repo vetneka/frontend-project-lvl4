@@ -20,7 +20,7 @@ const AddChannel = ({ onHide }) => {
     inputChannelRef.current.focus();
   }, []);
 
-  const handleSubmitForm = (values, { setSubmitting }) => {
+  const handleSubmitForm = (values, { setSubmitting, setErrors }) => {
     const channel = {
       name: values.name,
     };
@@ -33,9 +33,10 @@ const AddChannel = ({ onHide }) => {
       },
       () => {
         setSubmitting(false);
-        onHide();
+        inputChannelRef.current.focus();
+        setErrors({ network: 'errors.network'});
       },
-      1000,
+      2000,
     ));
   };
 
@@ -70,8 +71,10 @@ const AddChannel = ({ onHide }) => {
                   placeholder={t('forms.channel.placeholder')}
                   ref={inputChannelRef}
                   data-testid="add-channel"
+                  disabled={isSubmitting}
                 />
-                <Form.Control.Feedback type="invalid" className="ps-3">
+                <Form.Control.Feedback type="invalid" className="ps-3" style={errors.network && { display: 'block' }}>
+                  {errors.network && t(errors.network)}
                   {t(errors.name)}
                 </Form.Control.Feedback>
               </Form.Group>
