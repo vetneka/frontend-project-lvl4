@@ -2,13 +2,15 @@ import React from 'react';
 
 import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 
 import { signUpSchema } from '../validationSchems.js';
 import { useAuth } from '../hooks/index.js';
+
+import { has } from '../utilities.js';
 
 const SignUpForm = () => {
   const usernameRef = React.useRef();
@@ -62,8 +64,8 @@ const SignUpForm = () => {
               name="username"
               onChange={handleChange}
               value={values.username}
-              isValid={touched.hasOwnProperty('username') && !errors.hasOwnProperty('username')}
-              isInvalid={errors.hasOwnProperty('username')}
+              isValid={has(touched, 'username') && !has(errors, 'username')}
+              isInvalid={has(errors, 'username')}
               placeholder={t('forms.username.placeholder')}
               ref={usernameRef}
             />
@@ -80,8 +82,8 @@ const SignUpForm = () => {
               name="password"
               onChange={handleChange}
               value={values.password}
-              isValid={touched.hasOwnProperty('password') && !errors.hasOwnProperty('password')}
-              isInvalid={errors.hasOwnProperty('password')}
+              isValid={has(touched, 'password') && !has(errors, 'password')}
+              isInvalid={has(errors, 'password')}
               placeholder={t('forms.password.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
@@ -100,8 +102,8 @@ const SignUpForm = () => {
               name="passwordConfirmation"
               onChange={handleChange}
               value={values.passwordConfirmation}
-              isValid={touched.hasOwnProperty('passwordConfirmation') && !errors.hasOwnProperty('passwordConfirmation')}
-              isInvalid={errors.hasOwnProperty('passwordConfirmation')}
+              isValid={has(touched, 'passwordConfirmation') && !has(errors, 'passwordConfirmation')}
+              isInvalid={has(errors, 'passwordConfirmation')}
               placeholder={t('forms.passwordConfirmation.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">

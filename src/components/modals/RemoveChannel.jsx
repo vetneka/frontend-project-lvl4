@@ -21,7 +21,7 @@ const RemoveChannel = ({ onHide }) => {
       },
       () => {
         setSubmitting(false);
-        setErrors({ network: 'errors.network'});
+        setErrors({ network: 'errors.network' });
       },
       1000,
     ));

@@ -10,6 +10,8 @@ import { selectChannelById } from '../../slices/channelsInfoSlice.js';
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
 import { useSocket } from '../../hooks/index.js';
 
+import { has } from '../../utilities.js';
+
 const RenameChannel = ({ onHide }) => {
   const inputChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
@@ -40,7 +42,7 @@ const RenameChannel = ({ onHide }) => {
       () => {
         setSubmitting(false);
         inputChannelRef.current.focus();
-        setErrors({ network: 'errors.network'});
+        setErrors({ network: 'errors.network' });
       },
       2000,
     ));
@@ -73,7 +75,7 @@ const RenameChannel = ({ onHide }) => {
                   name="name"
                   onChange={handleChange}
                   value={values.name}
-                  isInvalid={errors.hasOwnProperty('name')}
+                  isInvalid={has(errors, 'name')}
                   placeholder={t('forms.channel.placeholder')}
                   ref={inputChannelRef}
                   data-testid="rename-channel"

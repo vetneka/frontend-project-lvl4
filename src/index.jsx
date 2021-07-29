@@ -14,4 +14,4 @@ App().then((vdom) => {
     vdom,
     document.getElementById('chat'),
   );
-})
+});

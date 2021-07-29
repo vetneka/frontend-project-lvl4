@@ -11,13 +11,13 @@ import {
 
 import i18n from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
-import resources from './locales/index.js';
 
 import { Provider as RollbarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 
 import { Provider } from 'react-redux';
 
 import { io } from 'socket.io-client';
+import resources from './locales/index.js';
 import store from './store.js';
 
 import {

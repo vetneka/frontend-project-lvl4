@@ -28,7 +28,7 @@ const AddMessageForm = (props) => {
       },
       () => {
         setSubmitting(false);
-        setErrors({ network: 'errors.network'});
+        setErrors({ network: 'errors.network' });
         inputMessageRef.current.focus();
       },
       2000,
@@ -69,6 +69,7 @@ const AddMessageForm = (props) => {
                 placeholder={t('forms.message.placeholder')}
                 ref={inputMessageRef}
                 data-testid="new-message"
+                disabled={isSubmitting}
               />
               <Button
                 type="submit"

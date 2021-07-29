@@ -8,6 +8,8 @@ import { Formik } from 'formik';
 import { blacklistSchemaBuilder } from '../../validationSchems.js';
 import { useSocket } from '../../hooks/index.js';
 
+import { has } from '../../utilities.js';
+
 const AddChannel = ({ onHide }) => {
   const inputChannelRef = React.useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
@@ -34,7 +36,7 @@ const AddChannel = ({ onHide }) => {
       () => {
         setSubmitting(false);
         inputChannelRef.current.focus();
-        setErrors({ network: 'errors.network'});
+        setErrors({ network: 'errors.network' });
       },
       2000,
     ));
@@ -67,7 +69,7 @@ const AddChannel = ({ onHide }) => {
                   name="name"
                   onChange={handleChange}
                   value={values.name}
-                  isInvalid={errors.hasOwnProperty('name')}
+                  isInvalid={has(errors, 'name')}
                   placeholder={t('forms.channel.placeholder')}
                   ref={inputChannelRef}
                   data-testid="add-channel"

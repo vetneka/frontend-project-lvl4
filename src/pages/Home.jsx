@@ -36,7 +36,7 @@ const Home = () => {
   }
 
   return (
-    <div className="row pt-2 pb-4 px-3 gy-3 h-100">
+    <div className="row pt-2 pb-4 px-3 pe-md-0 gy-3 h-100">
       <div className="col-channels shadow">
         <ChannelsNav />
       </div>

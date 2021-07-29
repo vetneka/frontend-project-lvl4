@@ -30,8 +30,8 @@ const Chat = () => {
 
   return (
     <div className="chat h-100 d-flex flex-column">
-      <div className="chat__header p-2 mb-2">
-        <div className="shadow mb-3 px-3 py-1 rounded-pill d-flex flex-wrap align-items-center">
+      <div className="chat__header mb-3">
+        <div className="shadow px-3 py-1 rounded-pill d-flex flex-wrap align-items-center">
           <span className="fs-6 me-2 text-truncate">
             #
             {activeChannel.name}

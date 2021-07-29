@@ -10,7 +10,9 @@ import Avatar from './Avatar.jsx';
 import { setCurrentChannel } from '../slices/channelsInfoSlice';
 import { openModal } from '../slices/modalSlice';
 
-const Channel = ({ channel, index, onRenameChannel, onRemoveChannel }) => {
+const Channel = ({
+  channel, index, onRenameChannel, onRemoveChannel,
+}) => {
   const { t } = useTranslation();
 
   if (!channel.removable) {
@@ -31,7 +33,7 @@ const Channel = ({ channel, index, onRenameChannel, onRemoveChannel }) => {
           <Avatar colorIndex={index} name={channel.name} className="me-2" />
           <span className="text-truncate">{channel.name}</span>
         </Nav.Link>
-        <Dropdown.Toggle as={NavLink} className="p-2 ms-2" id={`channel-dropdown-${index}`} />
+        <Dropdown.Toggle as={NavLink} className="p-2 ms-2 align-self-center" id={`channel-dropdown-${index}`} />
       </ButtonGroup>
       <Dropdown.Menu>
         <Dropdown.Item onClick={onRenameChannel(channel.id)}>{t('channels.buttons.rename')}</Dropdown.Item>
@@ -83,8 +85,8 @@ const ChannelsNav = () => {
       </div>
 
       <Navbar.Toggle aria-controls="navbarScroll" className="ms-3">
-        <span class="navbar-toggler-icon"></span>
-        <span className="btn-close"></span>
+        <span className="navbar-toggler-icon" />
+        <span className="btn-close" />
       </Navbar.Toggle>
 
       <Navbar.Collapse id="navbarScroll" className="w-100 overflow-auto" ref={channelsContainerRef}>
