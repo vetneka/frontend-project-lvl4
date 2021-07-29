@@ -48,10 +48,6 @@
   &--hexlet {
     background-image: url("./icon-hexlet.png");
   }
-
-  &--cmarix {
-    background-image: url("./icon-cmarix.png");
-  }
 }
 
 .avatar {
@@ -115,14 +111,15 @@
 }
 
 .message__avatar {
+  font-weight: 400;
   background-color: $success;
 }
 
-.channels-col {
+.col-channels {
   width: 100%;
 
   .navbar-collapse {
-    max-height: 100px;
+    max-height: 115px;
     overflow: auto;
   }
 
@@ -133,5 +130,37 @@
     .navbar-collapse {
       max-height: initial;
     }
+  }
+}
+
+.col-chat {
+  height: calc(100% - 56px);
+
+  @include media-breakpoint-up(md) {
+    height: 100%;
+  }
+}
+
+.navbar-toggler .navbar-toggler-icon {
+  display: none;
+}
+
+.navbar-toggler {
+  &.collapsed {
+    .navbar-toggler-icon {
+      display: block;
+    }
+
+    .btn-close {
+      display: none;
+    }
+  }
+
+  .navbar-toggler-icon {
+    display: none;
+  }
+
+  .btn-close {
+    display: block;
   }
 }

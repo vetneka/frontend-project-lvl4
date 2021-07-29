@@ -36,12 +36,12 @@ const Home = () => {
   }
 
   return (
-    <div className="row gx-4 gy-3 h-100">
-      <div className="channels-col shadow">
+    <div className="row pt-2 pb-4 px-3 gy-3 h-100">
+      <div className="col-channels shadow">
         <ChannelsNav />
       </div>
 
-      <div className="col h-100">
+      <div className="col col-chat">
         <Chat />
       </div>
 

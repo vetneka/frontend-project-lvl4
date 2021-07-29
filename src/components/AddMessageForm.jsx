@@ -35,8 +35,16 @@ const AddMessageForm = (props) => {
   };
 
   React.useEffect(() => {
+    console.log('input Message')
+    console.log('currentChannelId', currentChannelId)
+    console.log('currentUsername', currentUsername)
     inputMessageRef.current.focus();
-  }, []);
+  });
+
+  // React.useEffect(() => {
+  //   console.log('input Message')
+  //   inputMessageRef.current.focus();
+  // }, [currentChannelId]);
 
   return (
     <Formik

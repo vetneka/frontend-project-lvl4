@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   return (
-    <header className="pb-2">
+    <header>
       <Navbar variant="light" bg="transparent">
         <Container className="border-bottom pb-2">
           <Navbar.Brand as={Link} to="/">{t('header.logo')}</Navbar.Brand>

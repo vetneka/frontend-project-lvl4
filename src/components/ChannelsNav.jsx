@@ -10,6 +10,37 @@ import Avatar from './Avatar.jsx';
 import { setCurrentChannel } from '../slices/channelsInfoSlice';
 import { openModal } from '../slices/modalSlice';
 
+const Channel = ({ channel, index, onRenameChannel, onRemoveChannel }) => {
+  const { t } = useTranslation();
+
+  if (!channel.removable) {
+    return (
+      <Nav.Item>
+        <Nav.Link eventKey={channel.id} className="d-flex align-items-center text-truncate">
+          <Avatar colorIndex={index} name={channel.name} className="me-2" />
+          <span className="text-truncate">{channel.name}</span>
+        </Nav.Link>
+      </Nav.Item>
+    );
+  }
+
+  return (
+    <Dropdown as={NavItem}>
+      <ButtonGroup className="w-100">
+        <Nav.Link eventKey={channel.id} className="w-100 d-flex align-items-center text-truncate">
+          <Avatar colorIndex={index} name={channel.name} className="me-2" />
+          <span className="text-truncate">{channel.name}</span>
+        </Nav.Link>
+        <Dropdown.Toggle as={NavLink} className="p-2 ms-2" id={`channel-dropdown-${index}`} />
+      </ButtonGroup>
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={onRenameChannel(channel.id)}>{t('channels.buttons.rename')}</Dropdown.Item>
+        <Dropdown.Item className="text-danger" onClick={onRemoveChannel(channel.id)}>{t('channels.buttons.delete')}</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
 const ChannelsNav = () => {
   const currentChannelId = useSelector((state) => state.channelsInfo.currentChannelId);
   const channelsContainerRef = React.useRef();
@@ -51,38 +82,22 @@ const ChannelsNav = () => {
         </Button>
       </div>
 
-      <Navbar.Toggle aria-controls="navbarScroll" className="ms-3" />
+      <Navbar.Toggle aria-controls="navbarScroll" className="ms-3">
+        <span class="navbar-toggler-icon"></span>
+        <span className="btn-close"></span>
+      </Navbar.Toggle>
 
       <Navbar.Collapse id="navbarScroll" className="w-100 overflow-auto" ref={channelsContainerRef}>
         <Nav className="h-100 mr-auto my-lg-0 flex-md-column w-100" activeKey={currentChannelId} onSelect={onSelectChannel}>
-          {channels.map((channel, index) => {
-            if (!channel.removable) {
-              return (
-                <Nav.Item key={channel.id}>
-                  <Nav.Link eventKey={channel.id} className="d-flex align-items-center text-truncate">
-                    <Avatar colorIndex={index} name={channel.name} className="me-2" />
-                    <span className="text-truncate">{channel.name}</span>
-                  </Nav.Link>
-                </Nav.Item>
-              );
-            }
-
-            return (
-              <Dropdown as={NavItem} key={channel.id}>
-                <ButtonGroup className="w-100">
-                  <Nav.Link eventKey={channel.id} className="w-100 d-flex align-items-center text-truncate">
-                    <Avatar colorIndex={index} name={channel.name} className="me-2" />
-                    <span className="text-truncate">{channel.name}</span>
-                  </Nav.Link>
-                  <Dropdown.Toggle as={NavLink} className="p-2 ms-2" id={`channel-dropdown-${index}`} />
-                </ButtonGroup>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={onRenameChannel(channel.id)}>{t('channels.buttons.rename')}</Dropdown.Item>
-                  <Dropdown.Item className="text-danger" onClick={onRemoveChannel(channel.id)}>{t('channels.buttons.delete')}</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            );
-          })}
+          {channels.map((channel, index) => (
+            <Channel
+              key={channel.id}
+              channel={channel}
+              index={index}
+              onRemoveChannel={onRemoveChannel}
+              onRenameChannel={onRenameChannel}
+            />
+          ))}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
