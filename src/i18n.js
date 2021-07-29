@@ -1,16 +1,21 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+// import i18n from 'i18next';
+// import { initReactI18next } from 'react-i18next';
 
-import resources from './locales/index.js';
+// import resources from './locales/index.js';
 
-const defaultLng = 'ru';
+// import buildYupLocale from './validationSchems.js';
 
-i18n
-  .use(initReactI18next)
-  .init({
-    debug: false,
-    lng: defaultLng,
-    resources,
-  });
+// const defaultLng = 'ru';
 
-export default i18n;
+// i18n
+//   .use(initReactI18next)
+//   .init(
+//     {
+//       debug: false,
+//       lng: defaultLng,
+//       resources,
+//     },
+//     buildYupLocale,
+//   );
+
+// export default i18n;

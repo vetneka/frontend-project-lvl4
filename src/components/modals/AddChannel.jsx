@@ -66,13 +66,13 @@ const AddChannel = ({ onHide }) => {
                   name="name"
                   onChange={handleChange}
                   value={values.name}
-                  isInvalid={!!errors.name}
+                  isInvalid={errors.hasOwnProperty('name')}
                   placeholder={t('forms.channel.placeholder')}
                   ref={inputChannelRef}
                   data-testid="add-channel"
                 />
                 <Form.Control.Feedback type="invalid" className="ps-3">
-                  {errors.name}
+                  {t(errors.name)}
                 </Form.Control.Feedback>
               </Form.Group>
 

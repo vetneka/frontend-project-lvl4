@@ -29,7 +29,7 @@ const SignUpForm = () => {
 
       if (isAxiosError && status === 409) {
         props.resetForm();
-        props.setErrors({ username: t('forms.errors.duplicateUser') });
+        props.setErrors({ username: 'forms.errors.duplicateUser' });
         props.setValues({ ...values, password: '', passwordConfirmation: '' });
         usernameRef.current.select();
       }
@@ -62,13 +62,13 @@ const SignUpForm = () => {
               name="username"
               onChange={handleChange}
               value={values.username}
-              isValid={touched.username && !errors.username}
-              isInvalid={!!errors.username}
+              isValid={touched.hasOwnProperty('username') && !errors.hasOwnProperty('username')}
+              isInvalid={errors.hasOwnProperty('username')}
               placeholder={t('forms.username.placeholder')}
               ref={usernameRef}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
-              {errors.username}
+              {t(errors.username)}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -80,12 +80,12 @@ const SignUpForm = () => {
               name="password"
               onChange={handleChange}
               value={values.password}
-              isValid={touched.password && !errors.password}
-              isInvalid={!!errors.password}
+              isValid={touched.hasOwnProperty('password') && !errors.hasOwnProperty('password')}
+              isInvalid={errors.hasOwnProperty('password')}
               placeholder={t('forms.password.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
-              {errors.password}
+              {t(errors.password)}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -100,12 +100,12 @@ const SignUpForm = () => {
               name="passwordConfirmation"
               onChange={handleChange}
               value={values.passwordConfirmation}
-              isValid={touched.passwordConfirmation && !errors.passwordConfirmation}
-              isInvalid={!!errors.passwordConfirmation}
+              isValid={touched.hasOwnProperty('passwordConfirmation') && !errors.hasOwnProperty('passwordConfirmation')}
+              isInvalid={errors.hasOwnProperty('passwordConfirmation')}
               placeholder={t('forms.passwordConfirmation.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
-              {errors.passwordConfirmation}
+              {t(errors.passwordConfirmation)}
             </Form.Control.Feedback>
           </Form.Group>
 

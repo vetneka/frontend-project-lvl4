@@ -28,7 +28,7 @@ const LoginForm = () => {
       const { isAxiosError, response: { status } } = error;
 
       if (isAxiosError && status === 401) {
-        props.setErrors({ username: true, password: t('forms.errors.login') });
+        props.setErrors({ username: '', password: 'forms.errors.login' });
         props.setValues({ ...values, password: '' });
         usernameRef.current.select();
       }
@@ -48,7 +48,9 @@ const LoginForm = () => {
     >
       {({
         handleSubmit, handleChange, values, errors, isSubmitting,
-      }) => (
+      }) => {
+        console.log(errors)
+        return (
         <Form noValidate onSubmit={handleSubmit}>
           <h1 className="h2 mb-3 text-center">{t('login.header')}</h1>
 
@@ -60,12 +62,12 @@ const LoginForm = () => {
               name="username"
               onChange={handleChange}
               value={values.username}
-              isInvalid={!!errors.username}
+              isInvalid={errors.hasOwnProperty('username')}
               placeholder={t('forms.login.placeholder')}
               ref={usernameRef}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
-              {errors.username}
+              {t(errors.username)}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -77,11 +79,11 @@ const LoginForm = () => {
               name="password"
               onChange={handleChange}
               value={values.password}
-              isInvalid={!!errors.password}
+              isInvalid={errors.hasOwnProperty('password')}
               placeholder={t('forms.password.placeholder')}
             />
             <Form.Control.Feedback type="invalid" className="ps-3">
-              {errors.password}
+              {t(errors.password)}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -93,7 +95,7 @@ const LoginForm = () => {
             {t('login.button')}
           </Button>
         </Form>
-      )}
+      )}}
     </Formik>
   );
 };

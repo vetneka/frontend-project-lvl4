@@ -5,10 +5,13 @@ import {
   Switch,
   Route,
   Redirect,
-  useLocation, useHistory,
+  useLocation,
+  useHistory,
 } from 'react-router-dom';
 
-import './i18n';
+import i18n from 'i18next';
+import { initReactI18next, I18nextProvider } from 'react-i18next';
+import resources from './locales/index.js';
 
 import { Provider as RollbarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 
@@ -18,7 +21,10 @@ import { io } from 'socket.io-client';
 import store from './store.js';
 
 import {
-  Home, Login, SignUp, NotFound,
+  Home,
+  Login,
+  SignUp,
+  NotFound,
 } from './pages/index.js';
 import { Header, Main, Footer } from './components/index.js';
 import { authContext, socketContext } from './contexts/index.js';
@@ -126,7 +132,7 @@ const SocketProvider = ({ socket, children }) => {
 
 const ErrorBoundaryPage = () => <NotFound />;
 
-const App = (socketClient = io()) => {
+const App = async (socketClient = io()) => {
   const rollbarConfig = {
     accessToken: 'f9608de6d0864fa88ad84bbc5b90d869',
     captureUncaught: true,
@@ -143,6 +149,19 @@ const App = (socketClient = io()) => {
     },
   };
 
+  const defaultLocale = 'ru';
+  const i18nInstance = i18n.createInstance();
+
+  await i18nInstance
+    .use(initReactI18next)
+    .init(
+      {
+        lng: defaultLocale,
+        debug: false,
+        resources,
+      },
+    );
+
   return (
     <Router>
       <RollbarProvider config={rollbarConfig}>
@@ -150,26 +169,28 @@ const App = (socketClient = io()) => {
           <Provider store={store}>
             <SocketProvider socket={socketClient}>
               <AuthProvider>
-                <Header />
+                <I18nextProvider i18n={i18nInstance}>
+                  <Header />
 
-                <Main>
-                  <Switch>
-                    <Route path="/login">
-                      <Login />
-                    </Route>
-                    <Route path="/signup">
-                      <SignUp />
-                    </Route>
-                    <PrivateRoute exact path="/">
-                      <Home />
-                    </PrivateRoute>
-                    <Route path="*">
-                      <NotFound />
-                    </Route>
-                  </Switch>
-                </Main>
+                  <Main>
+                    <Switch>
+                      <Route path="/login">
+                        <Login />
+                      </Route>
+                      <Route path="/signup">
+                        <SignUp />
+                      </Route>
+                      <PrivateRoute exact path="/">
+                        <Home />
+                      </PrivateRoute>
+                      <Route path="*">
+                        <NotFound />
+                      </Route>
+                    </Switch>
+                  </Main>
 
-                <Footer />
+                  <Footer />
+                </I18nextProvider>
               </AuthProvider>
             </SocketProvider>
           </Provider>

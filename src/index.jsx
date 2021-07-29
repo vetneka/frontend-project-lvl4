@@ -9,7 +9,9 @@ import ReactDOM from 'react-dom';
 
 import App from './App.jsx';
 
-ReactDOM.render(
-  App(),
-  document.getElementById('chat'),
-);
+App().then((vdom) => {
+  ReactDOM.render(
+    vdom,
+    document.getElementById('chat'),
+  );
+})
