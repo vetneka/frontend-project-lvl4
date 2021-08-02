@@ -35,17 +35,12 @@ import { addChannel, removeChannel, renameChannel } from './slices/channelsInfoS
 import { addMessage } from './slices/messagesInfoSlice.js';
 import { useAuth } from './hooks/index.js';
 
-const getAuthedUser = () => {
-  const authedUser = localStorage.getItem('userId');
-  return (authedUser)
-    ? JSON.parse(authedUser)
-    : {};
-};
+import getAuthInfo from './getAuthInfo';
 
 const AuthProvider = ({ children }) => {
-  const authedUser = getAuthedUser();
+  const authInfo = getAuthInfo();
 
-  const [loggedIn, setLoggedIn] = React.useState(!!authedUser.token);
+  const [loggedIn, setLoggedIn] = React.useState(!!authInfo.token);
 
   const history = useHistory();
   const location = useLocation();
@@ -67,7 +62,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <authContext.Provider value={{
-      authedUser, loggedIn, logIn, logOut,
+      authInfo, loggedIn, logIn, logOut,
     }}
     >
       {children}
@@ -76,12 +71,12 @@ const AuthProvider = ({ children }) => {
 };
 
 const PrivateRoute = ({ children, path }) => {
-  const { authedUser } = useAuth();
+  const { authInfo } = useAuth();
 
   return (
     <Route path={path}>
       {
-        (authedUser.token)
+        (authInfo.token)
           ? children
           : <Redirect to="/login" />
       }

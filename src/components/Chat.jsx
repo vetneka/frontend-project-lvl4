@@ -10,7 +10,7 @@ import { useAuth } from '../hooks/index.js';
 import { selectChannelById } from '../slices/channelsInfoSlice';
 
 const Chat = () => {
-  const { authedUser } = useAuth();
+  const { authInfo } = useAuth();
   const { t } = useTranslation();
   const messagesContainerRef = React.useRef();
 
@@ -49,7 +49,7 @@ const Chat = () => {
           {messages.map((message) => (
             <li className="text-break mb-4" key={message.id}>
               <Message
-                currentUsername={authedUser.username}
+                currentUsername={authInfo.username}
                 username={message.username}
                 body={message.body}
               />
@@ -60,7 +60,7 @@ const Chat = () => {
 
       <div className="chat__footer mt-auto pt-2">
         <AddMessageForm
-          currentUsername={authedUser.username}
+          currentUsername={authInfo.username}
           currentChannelId={currentChannelId}
         />
       </div>

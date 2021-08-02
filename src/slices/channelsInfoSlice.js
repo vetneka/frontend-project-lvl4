@@ -4,13 +4,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../routes.js';
 
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
+import getAuthInfo from '../getAuthInfo.js';
 
-  return {
-    Authorization: `Bearer ${userId.token}`,
-  };
-};
+const createAuthHeader = () => ({
+  Authorization: `Bearer ${getAuthInfo().token}`,
+});
 
 const defaultChannelId = 1;
 
@@ -57,7 +55,7 @@ export const {
 } = channelsInfoSlice.actions;
 
 export const setInitialStateThunk = () => async (dispatch) => {
-  const response = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
+  const response = await axios.get(routes.dataPath(), { headers: createAuthHeader() });
   dispatch(setInitialState(response.data));
 };
 
