@@ -41,22 +41,14 @@ const channelsInfoSlice = createSlice({
   },
 });
 
-export const selectChannelById = (state, channelId) => {
-  const result = state.channelsInfo.channels.find((channel) => channel.id === channelId);
-  return result;
-};
+export const selectChannelById = (state, channelId) => (
+  state.channelsInfo.channels.find((channel) => channel.id === channelId));
 
-export const {
-  setInitialState,
-  setCurrentChannel,
-  addChannel,
-  renameChannel,
-  removeChannel,
-} = channelsInfoSlice.actions;
+export const { actions } = channelsInfoSlice;
 
-export const setInitialStateThunk = () => async (dispatch) => {
+export const fetchChannels = () => async (dispatch) => {
   const response = await axios.get(routes.dataPath(), { headers: createAuthHeader() });
-  dispatch(setInitialState(response.data));
+  dispatch(actions.setInitialState(response.data));
 };
 
 export default channelsInfoSlice.reducer;

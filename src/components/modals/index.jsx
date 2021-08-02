@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { closeModal } from '../../slices/modalSlice.js';
+import { actions as modalActions } from '../../slices/modalSlice.js';
 
 import AddChannel from './AddChannel.jsx';
 import RemoveChannel from './RemoveChannel.jsx';
@@ -17,7 +17,7 @@ const Modal = ({ type }) => {
   const dispatch = useDispatch();
 
   const onHideModal = () => {
-    dispatch(closeModal());
+    dispatch(modalActions.closeModal());
   };
 
   const SelectedModal = modalTypes[type];

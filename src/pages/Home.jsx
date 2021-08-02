@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Modal from '../components/modals/index.jsx';
 import { ChannelsNav, Chat } from '../components/index.js';
 
-import { setInitialStateThunk } from '../slices/channelsInfoSlice';
+import { fetchChannels } from '../slices/channelsInfoSlice';
 
 const Home = () => {
   const [pageState, setPageState] = React.useState('pending');
@@ -16,7 +16,7 @@ const Home = () => {
 
   React.useEffect(() => {
     if (pageState === 'pending') {
-      dispatch(setInitialStateThunk())
+      dispatch(fetchChannels())
         .then(() => {
           setPageState('fulfilled');
         })

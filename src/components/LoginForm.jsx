@@ -12,7 +12,6 @@ import routes from '../routes';
 import { loginSchema } from '../validationSchemas.js';
 import { useAuth } from '../hooks/index.js';
 
-
 const LoginForm = () => {
   const usernameRef = React.useRef();
   const { logIn } = useAuth();

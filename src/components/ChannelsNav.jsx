@@ -7,8 +7,8 @@ import {
 
 import Avatar from './Avatar.jsx';
 
-import { setCurrentChannel } from '../slices/channelsInfoSlice';
-import { openModal } from '../slices/modalSlice';
+import { actions as channelsInfoActions } from '../slices/channelsInfoSlice';
+import { actions as modalActions } from '../slices/modalSlice';
 
 const Channel = ({
   channel, index, onRenameChannel, onRemoveChannel,
@@ -44,30 +44,30 @@ const Channel = ({
 };
 
 const ChannelsNav = () => {
-  const currentChannelId = useSelector((state) => state.channelsInfo.currentChannelId);
   const channelsContainerRef = React.useRef();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const currentChannelId = useSelector((state) => state.channelsInfo.currentChannelId);
   const channels = useSelector((state) => state.channelsInfo.channels);
 
   const onSelectChannel = (eventKey, event) => {
     event.preventDefault();
-    dispatch(setCurrentChannel(Number(eventKey)));
+    dispatch(channelsInfoActions.setCurrentChannel(Number(eventKey)));
   };
 
   const onShowModal = (type, item = null) => () => {
-    dispatch(openModal({ type, item }));
+    dispatch(modalActions.openModal({ type, item }));
   };
 
   const onRemoveChannel = (id) => (event) => {
     event.preventDefault();
-    dispatch(openModal({ type: 'removing', extra: { channelId: id } }));
+    dispatch(modalActions.openModal({ type: 'removing', extra: { channelId: id } }));
   };
 
   const onRenameChannel = (id) => (event) => {
     event.preventDefault();
-    dispatch(openModal({ type: 'renaming', extra: { channelId: id } }));
+    dispatch(modalActions.openModal({ type: 'renaming', extra: { channelId: id } }));
   };
 
   return (

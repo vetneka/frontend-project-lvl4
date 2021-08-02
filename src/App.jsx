@@ -22,17 +22,14 @@ import { Provider } from 'react-redux';
 
 import store from './store.js';
 
-import {
-  Home,
-  Login,
-  SignUp,
-  NotFound,
-} from './pages/index.js';
+import { Home, Login, SignUp, NotFound } from './pages/index.js';
 import { Header, Main, Footer } from './components/index.js';
+
 import { authContext, socketContext } from './contexts/index.js';
 
-import { addChannel, removeChannel, renameChannel } from './slices/channelsInfoSlice.js';
-import { addMessage } from './slices/messagesInfoSlice.js';
+import { actions as channelsInfoActions } from './slices/channelsInfoSlice.js';
+import { actions as messagesInfoActions } from './slices/messagesInfoSlice.js';
+
 import { useAuth } from './hooks/index.js';
 
 import getAuthInfo from './getAuthInfo';
@@ -105,19 +102,19 @@ const SocketProvider = ({ socket, children }) => {
   };
 
   socket.on('newMessage', (message) => {
-    store.dispatch(addMessage(message));
+    store.dispatch(messagesInfoActions.addMessage(message));
   });
 
   socket.on('newChannel', (channel) => {
-    store.dispatch(addChannel(channel));
+    store.dispatch(channelsInfoActions.addChannel(channel));
   });
 
   socket.on('removeChannel', ({ id }) => {
-    store.dispatch(removeChannel(id));
+    store.dispatch(channelsInfoActions.removeChannel(id));
   });
 
   socket.on('renameChannel', (channel) => {
-    store.dispatch(renameChannel(channel));
+    store.dispatch(channelsInfoActions.renameChannel(channel));
   });
 
   return (
