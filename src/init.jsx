@@ -12,7 +12,8 @@ import App from './App.jsx';
 
 const init = async (socketClient = io()) => {
   const rollbarConfig = {
-    accessToken: 'f9608de6d0864fa88ad84bbc5b90d869',
+    enabled: process.env.NODE_ENV === 'production',
+    accessToken: process.env.ROLLBAR_TOKEN,
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
