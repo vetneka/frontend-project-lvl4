@@ -2,15 +2,16 @@ import React from 'react';
 
 import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+
+import has from 'lodash';
 
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
 import routes from '../routes';
 
-import { loginSchema } from '../validationSchems.js';
+import { loginSchema } from '../validationSchemas.js';
 import { useAuth } from '../hooks/index.js';
 
-import { has } from '../utilities.js';
 
 const LoginForm = () => {
   const usernameRef = React.useRef();

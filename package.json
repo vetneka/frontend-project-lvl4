@@ -8,8 +8,8 @@
     "node": "14.x"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'dist/public/*.js'",
     "test": "echo 'no tests for this project'",
-    "prebuild": "rm -rf dist",
     "build": "NODE_ENV=production npx webpack --mode production",
     "start": "node bin/slack.js"
   },
@@ -82,6 +82,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "source-map-explorer": "^2.5.2"
   }
 }

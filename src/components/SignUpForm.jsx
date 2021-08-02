@@ -4,13 +4,13 @@ import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import has from 'lodash';
+
 import axios from 'axios';
 import routes from '../routes.js';
 
-import { signUpSchema } from '../validationSchems.js';
+import { signUpSchema } from '../validationSchemas.js';
 import { useAuth } from '../hooks/index.js';
-
-import { has } from '../utilities.js';
 
 const SignUpForm = () => {
   const usernameRef = React.useRef();

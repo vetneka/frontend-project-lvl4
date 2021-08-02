@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, Button, Modal } from 'react-bootstrap';
 
+import has from 'lodash';
+
 import { Formik } from 'formik';
 
-import { blacklistSchemaBuilder } from '../../validationSchems.js';
+import { blacklistSchemaBuilder } from '../../validationSchemas.js';
 import { useSocket } from '../../hooks/index.js';
-
-import { has } from '../../utilities.js';
 
 const AddChannel = ({ onHide }) => {
   const inputChannelRef = React.useRef();

@@ -9,10 +9,14 @@ module.exports = {
   mode,
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      'lodash-es': 'lodash',
+    },
   },
   output: {
     path: path.join(__dirname, 'dist', 'public'),
     publicPath: '/assets/',
+    clean: true,
   },
   devServer: {
     compress: true,
