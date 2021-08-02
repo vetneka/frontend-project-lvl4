@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Main = ({ children }) => (
+const MainContainer = ({ children }) => (
   <main className="flex-grow-1 overflow-auto mb-3 mb-md-0">
     <div className="container h-100 overflow-auto">
       {children}
@@ -8,4 +8,4 @@ const Main = ({ children }) => (
   </main>
 );
 
-export default Main;
+export default MainContainer;

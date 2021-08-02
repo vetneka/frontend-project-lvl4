@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, Button, Modal } from 'react-bootstrap';
@@ -7,13 +7,13 @@ import { has } from 'lodash';
 
 import { Formik } from 'formik';
 
-import { selectChannelById } from '../../slices/channelsInfoSlice.js';
+import { selectChannelById } from '../../slices/channelsInfoSlice';
 
-import { blacklistSchemaBuilder } from '../../validationSchemas.js';
-import { useSocket } from '../../hooks/index.js';
+import { blacklistSchemaBuilder } from '../../validationSchemas';
+import { useSocket } from '../../hooks';
 
 const RenameChannel = ({ onHide }) => {
-  const inputChannelRef = React.useRef();
+  const inputChannelRef = useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
@@ -23,11 +23,11 @@ const RenameChannel = ({ onHide }) => {
   const allChannels = useSelector((state) => state.channelsInfo.channels);
   const channelsNames = allChannels.map((channel) => channel.name);
 
-  React.useEffect(() => {
+  useEffect(() => {
     inputChannelRef.current.select();
   }, []);
 
-  const handleSubmitForm = (values, { setSubmitting, setErrors }) => {
+  const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     const renamedChannel = {
       id: currentChannelId,
       name: values.name,
@@ -61,7 +61,7 @@ const RenameChannel = ({ onHide }) => {
           validationSchema={blacklistSchemaBuilder('name', channelsNames)}
           validateOnChange={false}
           validateOnBlur={false}
-          onSubmit={handleSubmitForm}
+          onSubmit={handleFormSubmit}
         >
           {({
             handleSubmit, handleChange, values, errors, isSubmitting,

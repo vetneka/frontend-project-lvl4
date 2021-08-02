@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
@@ -44,7 +44,7 @@ const Channel = ({
 };
 
 const ChannelsNav = () => {
-  const channelsContainerRef = React.useRef();
+  const channelsContainerRef = useRef();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 

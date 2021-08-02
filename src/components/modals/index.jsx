@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { actions as modalActions } from '../../slices/modalSlice.js';
+import { actions as modalActions } from '../../slices/modalSlice';
 
 import AddChannel from './AddChannel.jsx';
 import RemoveChannel from './RemoveChannel.jsx';

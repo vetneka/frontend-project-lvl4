@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SignUpForm } from '../components/index.js';
+import SignUpForm from '../components/SignUpForm.jsx';
 
 import bgImgSignUp from '../../assets/bg-signup.png';
 

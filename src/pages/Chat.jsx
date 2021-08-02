@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import Modal from '../components/modals/index.jsx';
-import { ChannelsNav, Chat } from '../components/index.js';
+import ChannelsNav from '../components/ChannelsNav.jsx';
+import ChatWindow from '../components/ChatWindow.jsx';
 
-import { fetchChannels } from '../slices/channelsInfoSlice';
+import { fetchChannels } from '../slices/channelsInfoSlice.js';
 
-const Home = () => {
-  const [pageState, setPageState] = React.useState('pending');
+const Chat = () => {
+  const [pageState, setPageState] = useState('pending');
 
   const modalType = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (pageState === 'pending') {
       dispatch(fetchChannels())
         .then(() => {
@@ -25,7 +26,7 @@ const Home = () => {
           console.error(error);
         });
     }
-  }, [pageState, dispatch]);
+  }, [pageState]);
 
   if (pageState === 'pending') {
     return <div>{t('common.loading')}</div>;
@@ -42,7 +43,7 @@ const Home = () => {
       </div>
 
       <div className="col col-chat">
-        <Chat />
+        <ChatWindow />
       </div>
 
       {modalType && <Modal type={modalType} />}
@@ -50,4 +51,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Chat;

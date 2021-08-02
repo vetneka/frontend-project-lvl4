@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import 'core-js/stable/index.js';
-import 'regenerator-runtime/runtime.js';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 import '../assets/application.scss';
 
@@ -20,24 +20,29 @@ import { Provider as RollbarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar
 
 import { Provider } from 'react-redux';
 
-import store from './store.js';
+import Chat from './pages/Chat.jsx';
+import Login from './pages/Login.jsx';
+import SignUp from './pages/SignUp.jsx';
+import NotFound from './pages/NotFound.jsx';
 
-import { Home, Login, SignUp, NotFound } from './pages/index.js';
-import { Header, Main, Footer } from './components/index.js';
+import Header from './components/Header.jsx';
+import MainContainer from './components/MainContainer.jsx';
+import Footer from './components/Footer.jsx';
 
-import { authContext, socketContext } from './contexts/index.js';
+import { authContext, socketContext } from './contexts';
 
-import { actions as channelsInfoActions } from './slices/channelsInfoSlice.js';
-import { actions as messagesInfoActions } from './slices/messagesInfoSlice.js';
+import store from './store';
+import { actions as channelsInfoActions } from './slices/channelsInfoSlice';
+import { actions as messagesInfoActions } from './slices/messagesInfoSlice';
 
-import { useAuth } from './hooks/index.js';
+import { useAuth } from './hooks';
 
 import getAuthInfo from './getAuthInfo';
 
 const AuthProvider = ({ children }) => {
   const authInfo = getAuthInfo();
 
-  const [loggedIn, setLoggedIn] = React.useState(!!authInfo.token);
+  const [loggedIn, setLoggedIn] = useState(!!authInfo.token);
 
   const history = useHistory();
   const location = useLocation();
@@ -126,43 +131,41 @@ const SocketProvider = ({ socket, children }) => {
 
 const ErrorBoundaryPage = () => <NotFound />;
 
-const App = ({ socketClient, i18nInstance, rollbarConfig }) => {
-  return (
-    <Router>
-      <RollbarProvider config={rollbarConfig}>
-        <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
-          <Provider store={store}>
-            <SocketProvider socket={socketClient}>
-              <AuthProvider>
-                <I18nextProvider i18n={i18nInstance}>
-                  <Header />
+const App = ({ socketClient, i18nInstance, rollbarConfig }) => (
+  <Router>
+    <RollbarProvider config={rollbarConfig}>
+      <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
+        <Provider store={store}>
+          <SocketProvider socket={socketClient}>
+            <AuthProvider>
+              <I18nextProvider i18n={i18nInstance}>
+                <Header />
 
-                  <Main>
-                    <Switch>
-                      <Route path="/login">
-                        <Login />
-                      </Route>
-                      <Route path="/signup">
-                        <SignUp />
-                      </Route>
-                      <PrivateRoute exact path="/">
-                        <Home />
-                      </PrivateRoute>
-                      <Route path="*">
-                        <NotFound />
-                      </Route>
-                    </Switch>
-                  </Main>
+                <MainContainer>
+                  <Switch>
+                    <Route path="/login">
+                      <Login />
+                    </Route>
+                    <Route path="/signup">
+                      <SignUp />
+                    </Route>
+                    <PrivateRoute exact path="/">
+                      <Chat />
+                    </PrivateRoute>
+                    <Route path="*">
+                      <NotFound />
+                    </Route>
+                  </Switch>
+                </MainContainer>
 
-                  <Footer />
-                </I18nextProvider>
-              </AuthProvider>
-            </SocketProvider>
-          </Provider>
-        </ErrorBoundary>
-      </RollbarProvider>
-    </Router>
-  );
-};
+                <Footer />
+              </I18nextProvider>
+            </AuthProvider>
+          </SocketProvider>
+        </Provider>
+      </ErrorBoundary>
+    </RollbarProvider>
+  </Router>
+);
 
 export default App;

@@ -6,7 +6,7 @@ import { io } from 'socket.io-client';
 
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import resources from './locales/index.js';
+import resources from './locales';
 
 import App from './App.jsx';
 

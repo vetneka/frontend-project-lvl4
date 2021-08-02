@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Button } from 'react-bootstrap';
 
 import { Formik } from 'formik';
 
-import { useSocket } from '../hooks/index.js';
+import { useSocket } from '../hooks';
 
 const AddMessageForm = (props) => {
   const { currentChannelId, currentUsername } = props;
-  const inputMessageRef = React.useRef();
+  const inputMessageRef = useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
-  const handleSubmitForm = (values, { setSubmitting, setErrors, resetForm }) => {
+  const handleFormSubmit = (values, { setSubmitting, setErrors, resetForm }) => {
     const message = {
       body: values.message,
       channelId: currentChannelId,
@@ -35,7 +35,7 @@ const AddMessageForm = (props) => {
     ));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     inputMessageRef.current.focus();
   }, [currentChannelId]);
 
@@ -44,7 +44,7 @@ const AddMessageForm = (props) => {
       initialValues={{
         message: '',
       }}
-      onSubmit={handleSubmitForm}
+      onSubmit={handleFormSubmit}
     >
       {({
         handleSubmit, handleChange, values, errors, isSubmitting,

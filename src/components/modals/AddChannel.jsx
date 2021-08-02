@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, Button, Modal } from 'react-bootstrap';
@@ -7,22 +7,22 @@ import { has } from 'lodash';
 
 import { Formik } from 'formik';
 
-import { blacklistSchemaBuilder } from '../../validationSchemas.js';
-import { useSocket } from '../../hooks/index.js';
+import { blacklistSchemaBuilder } from '../../validationSchemas';
+import { useSocket } from '../../hooks';
 
 const AddChannel = ({ onHide }) => {
-  const inputChannelRef = React.useRef();
+  const inputChannelRef = useRef();
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
   const allChannels = useSelector((state) => state.channelsInfo.channels);
   const channelsNames = allChannels.map((channel) => channel.name);
 
-  React.useEffect(() => {
+  useEffect(() => {
     inputChannelRef.current.focus();
   }, []);
 
-  const handleSubmitForm = (values, { setSubmitting, setErrors }) => {
+  const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     const channel = {
       name: values.name,
     };
@@ -55,7 +55,7 @@ const AddChannel = ({ onHide }) => {
           validationSchema={blacklistSchemaBuilder('name', channelsNames)}
           validateOnChange={false}
           validateOnBlur={false}
-          onSubmit={handleSubmitForm}
+          onSubmit={handleFormSubmit}
         >
           {({
             handleSubmit, handleChange, values, errors, isSubmitting,

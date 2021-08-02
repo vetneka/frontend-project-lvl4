@@ -5,14 +5,14 @@ import { Form, Button, Modal } from 'react-bootstrap';
 
 import { Formik } from 'formik';
 
-import { useSocket } from '../../hooks/index.js';
+import { useSocket } from '../../hooks';
 
 const RemoveChannel = ({ onHide }) => {
   const { socket, acknowledgeWithTimeout } = useSocket();
   const channelId = useSelector((state) => state.modal.extra.channelId);
   const { t } = useTranslation();
 
-  const handleSubmitForm = (values, { setSubmitting, setErrors }) => {
+  const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     setSubmitting(true);
     socket.emit('removeChannel', { id: values.channelId }, acknowledgeWithTimeout(
       () => {
@@ -35,7 +35,7 @@ const RemoveChannel = ({ onHide }) => {
       <Modal.Body>
         <Formik
           initialValues={{ channelId }}
-          onSubmit={handleSubmitForm}
+          onSubmit={handleFormSubmit}
         >
           {({ handleSubmit, errors, isSubmitting }) => (
             <Form noValidate onSubmit={handleSubmit}>

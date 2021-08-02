@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import Message from './Message.jsx';
 import AddMessageForm from './AddMessageForm.jsx';
 
-import { useAuth } from '../hooks/index.js';
+import { useAuth } from '../hooks';
 
 import { selectChannelById } from '../slices/channelsInfoSlice';
 
-const Chat = () => {
+const ChatWindow = () => {
   const { authInfo } = useAuth();
   const { t } = useTranslation();
-  const messagesContainerRef = React.useRef();
+  const messagesContainerRef = useRef();
 
   const currentChannelId = useSelector((state) => state.channelsInfo.currentChannelId);
   const activeChannel = useSelector((state) => selectChannelById(state, currentChannelId));
@@ -22,7 +22,7 @@ const Chat = () => {
     return allMessages.filter((message) => message.channelId === activeChannel.id);
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
@@ -68,4 +68,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatWindow;

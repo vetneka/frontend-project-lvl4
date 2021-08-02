@@ -3,7 +3,7 @@ import React from 'react';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../hooks/index.js';
+import { useAuth } from '../hooks';
 
 const Header = () => {
   const { loggedIn, logOut } = useAuth();

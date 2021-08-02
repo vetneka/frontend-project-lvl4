@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
@@ -9,19 +9,19 @@ import { has } from 'lodash';
 import axios from 'axios';
 import routes from '../routes';
 
-import { loginSchema } from '../validationSchemas.js';
-import { useAuth } from '../hooks/index.js';
+import { loginSchema } from '../validationSchemas';
+import { useAuth } from '../hooks';
 
 const LoginForm = () => {
-  const usernameRef = React.useRef();
+  const usernameRef = useRef();
   const { logIn } = useAuth();
   const { t } = useTranslation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     usernameRef.current.focus();
   }, []);
 
-  const handleSubmitForm = async (values, props) => {
+  const handleFormSubmit = async (values, props) => {
     try {
       const response = await axios.post(routes.loginPath(), values);
 
@@ -46,7 +46,7 @@ const LoginForm = () => {
       validationSchema={loginSchema}
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={handleSubmitForm}
+      onSubmit={handleFormSubmit}
     >
       {({
         handleSubmit, handleChange, values, errors, isSubmitting,
