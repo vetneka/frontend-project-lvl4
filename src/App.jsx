@@ -1,5 +1,10 @@
 import React from 'react';
 
+import 'core-js/stable/index.js';
+import 'regenerator-runtime/runtime.js';
+
+import '../assets/application.scss';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,15 +14,12 @@ import {
   useHistory,
 } from 'react-router-dom';
 
-import i18n from 'i18next';
-import { initReactI18next, I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 
 import { Provider as RollbarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 
 import { Provider } from 'react-redux';
 
-import { io } from 'socket.io-client';
-import resources from './locales/index.js';
 import store from './store.js';
 
 import {
@@ -132,36 +134,7 @@ const SocketProvider = ({ socket, children }) => {
 
 const ErrorBoundaryPage = () => <NotFound />;
 
-const App = async (socketClient = io()) => {
-  const rollbarConfig = {
-    accessToken: 'f9608de6d0864fa88ad84bbc5b90d869',
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-    payload: {
-      environment: 'production',
-      client: {
-        javascript: {
-          source_map_enabled: true,
-          code_version: '0.0.1',
-          guess_uncaught_frames: true,
-        },
-      },
-    },
-  };
-
-  const defaultLocale = 'ru';
-  const i18nInstance = i18n.createInstance();
-
-  await i18nInstance
-    .use(initReactI18next)
-    .init(
-      {
-        lng: defaultLocale,
-        debug: false,
-        resources,
-      },
-    );
-
+const App = ({ socketClient, i18nInstance, rollbarConfig }) => {
   return (
     <Router>
       <RollbarProvider config={rollbarConfig}>

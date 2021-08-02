@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import has from 'lodash';
+import { has } from 'lodash';
 
 import axios from 'axios';
 import routes from '../routes.js';

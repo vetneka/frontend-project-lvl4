@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, Button, Modal } from 'react-bootstrap';
 
-import has from 'lodash';
+import { has } from 'lodash';
 
 import { Formik } from 'formik';
 

@@ -13,6 +13,9 @@ module.exports = {
       'lodash-es': 'lodash',
     },
   },
+  entry: {
+    main: './src/index.jsx',
+  },
   output: {
     path: path.join(__dirname, 'dist', 'public'),
     publicPath: '/assets/',
