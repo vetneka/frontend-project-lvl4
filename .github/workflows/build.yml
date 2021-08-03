@@ -29,7 +29,3 @@ jobs:
       - name: run linter
         run: |
           make lint
-
-      - name: run build
-        run: |
-          make build
