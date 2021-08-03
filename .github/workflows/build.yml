@@ -32,4 +32,6 @@ jobs:
 
       - name: run build
         run: |
+          touch .env
+          echo ROLLBAR_TOKEN =${{ secrets.ROLLBAR_TOKEN }} >> .env
           make build
