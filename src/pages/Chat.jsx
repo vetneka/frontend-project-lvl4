@@ -6,7 +6,7 @@ import Modal from '../components/modals/index.jsx';
 import ChannelsNav from '../components/ChannelsNav.jsx';
 import ChatWindow from '../components/ChatWindow.jsx';
 
-import { fetchChannels } from '../slices/channelsInfoSlice.js';
+import { fetchChannels } from '../slices/channelsInfoSlice';
 
 const Chat = () => {
   const [pageState, setPageState] = useState('pending');
