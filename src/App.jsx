@@ -30,9 +30,8 @@ import { useAuth } from './hooks';
 import getAuthInfo from './getAuthInfo';
 
 const AuthProvider = ({ children }) => {
-  const authInfo = getAuthInfo();
-
-  const [loggedIn, setLoggedIn] = useState(!!authInfo.token);
+  const [authInfo, setAuthInfo] = useState(() => getAuthInfo());
+  const [loggedIn, setLoggedIn] = useState(!!authInfo?.token);
 
   const history = useHistory();
   const location = useLocation();
@@ -41,13 +40,16 @@ const AuthProvider = ({ children }) => {
     const { from } = location.state || { from: { pathname: '/' } };
 
     localStorage.setItem('userId', JSON.stringify(data));
+    setAuthInfo(data);
     setLoggedIn(true);
     history.replace(from);
   };
 
   const logOut = () => {
     const { from } = location.state || { from: { pathname: '/login' } };
+
     localStorage.removeItem('userId');
+    setAuthInfo(null);
     setLoggedIn(false);
     history.push(from);
   };
@@ -68,7 +70,7 @@ const PrivateRoute = ({ children, path }) => {
   return (
     <Route path={path}>
       {
-        (authInfo.token)
+        (authInfo?.token)
           ? children
           : <Redirect to="/login" />
       }
