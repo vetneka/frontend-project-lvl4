@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -6,12 +6,13 @@ import Modal from '../components/modals/index.jsx';
 import ChannelsNav from '../components/ChannelsNav.jsx';
 import ChatWindow from '../components/ChatWindow.jsx';
 
-import { fetchChannels } from '../slices/channelsInfoSlice';
+import { fetchChannels, selectChannelsProcessState } from '../slices/channelsInfoSlice';
+import { selectModalType } from '../slices/modalSlice';
 
 const Chat = () => {
-  const processState = useSelector((state) => state.channelsInfo.processState);
+  const processState = useSelector(selectChannelsProcessState);
+  const modalType = useSelector(selectModalType);
 
-  const modalType = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 

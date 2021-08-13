@@ -7,20 +7,16 @@ import AddMessageForm from './AddMessageForm.jsx';
 
 import { useAuth } from '../hooks';
 
-import { selectChannelById } from '../slices/channelsInfoSlice';
+import { selectActiveChannel } from '../slices/channelsInfoSlice';
+import { selectActiveChannelMessages } from '../slices/messagesInfoSlice';
 
 const ChatWindow = () => {
   const { authInfo } = useAuth();
   const { t } = useTranslation();
   const messagesContainerRef = useRef();
 
-  const currentChannelId = useSelector((state) => state.channelsInfo.currentChannelId);
-  const activeChannel = useSelector((state) => selectChannelById(state, currentChannelId));
-
-  const messages = useSelector((state) => {
-    const allMessages = state.messagesInfo.messages;
-    return allMessages.filter((message) => message.channelId === activeChannel.id);
-  });
+  const activeChannel = useSelector(selectActiveChannel);
+  const messages = useSelector(selectActiveChannelMessages);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -61,7 +57,7 @@ const ChatWindow = () => {
       <div className="chat__footer mt-auto pt-2">
         <AddMessageForm
           currentUsername={authInfo.username}
-          currentChannelId={currentChannelId}
+          currentChannelId={activeChannel.id}
         />
       </div>
     </div>

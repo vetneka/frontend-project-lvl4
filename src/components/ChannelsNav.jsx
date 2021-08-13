@@ -7,7 +7,11 @@ import {
 
 import Avatar from './Avatar.jsx';
 
-import { actions as channelsInfoActions } from '../slices/channelsInfoSlice';
+import {
+  actions as channelsInfoActions,
+  selectChannels,
+  selectCurrentChannelId,
+} from '../slices/channelsInfoSlice';
 import { actions as modalActions } from '../slices/modalSlice';
 
 const Channel = ({
@@ -48,8 +52,8 @@ const ChannelsNav = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const currentChannelId = useSelector((state) => state.channelsInfo.currentChannelId);
-  const channels = useSelector((state) => state.channelsInfo.channels);
+  const currentChannelId = useSelector(selectCurrentChannelId);
+  const channels = useSelector(selectChannels);
 
   const onSelectChannel = (eventKey, event) => {
     event.preventDefault();

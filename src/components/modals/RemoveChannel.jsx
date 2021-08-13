@@ -7,9 +7,11 @@ import { Formik } from 'formik';
 
 import { useSocket } from '../../hooks';
 
+import { selectModalExtraChannel } from '../../slices/modalSlice';
+
 const RemoveChannel = ({ onHide }) => {
   const { socket, acknowledgeWithTimeout } = useSocket();
-  const channelId = useSelector((state) => state.modal.extra.channelId);
+  const channel = useSelector(selectModalExtraChannel);
   const { t } = useTranslation();
 
   const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
@@ -34,7 +36,7 @@ const RemoveChannel = ({ onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          initialValues={{ channelId }}
+          initialValues={{ channelId: channel.id }}
           onSubmit={handleFormSubmit}
         >
           {({ handleSubmit, errors, isSubmitting }) => (

@@ -7,7 +7,8 @@ import { has } from 'lodash';
 
 import { Formik } from 'formik';
 
-import { selectChannelById } from '../../slices/channelsInfoSlice';
+import { selectChannels } from '../../slices/channelsInfoSlice';
+import { selectModalExtraChannel } from '../../slices/modalSlice';
 
 import { blacklistSchemaBuilder } from '../../validationSchemas';
 import { useSocket } from '../../hooks';
@@ -17,10 +18,9 @@ const RenameChannel = ({ onHide }) => {
   const { socket, acknowledgeWithTimeout } = useSocket();
   const { t } = useTranslation();
 
-  const currentChannelId = useSelector((state) => state.modal.extra.channelId);
-  const currentChannel = useSelector((state) => selectChannelById(state, currentChannelId));
+  const extraChannel = useSelector(selectModalExtraChannel);
 
-  const allChannels = useSelector((state) => state.channelsInfo.channels);
+  const allChannels = useSelector(selectChannels);
   const channelsNames = allChannels.map((channel) => channel.name);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const RenameChannel = ({ onHide }) => {
 
   const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     const renamedChannel = {
-      id: currentChannelId,
+      id: extraChannel.id,
       name: values.name,
     };
 
@@ -56,7 +56,7 @@ const RenameChannel = ({ onHide }) => {
       <Modal.Body>
         <Formik
           initialValues={{
-            name: currentChannel.name,
+            name: extraChannel.name,
           }}
           validationSchema={blacklistSchemaBuilder('name', channelsNames)}
           validateOnChange={false}

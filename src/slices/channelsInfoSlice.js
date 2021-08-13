@@ -58,12 +58,18 @@ const channelsInfoSlice = createSlice({
       .addCase(fetchChannels.rejected, (state, { error }) => {
         state.processState.status = 'error';
         state.processState.error = error.message;
-      })
+      });
   },
 });
 
-export const selectChannelById = (state, channelId) => (
-  state.channelsInfo.channels.find((channel) => channel.id === channelId));
+export const selectChannelsProcessState = (state) => state.channelsInfo.processState;
+
+export const selectChannels = (state) => state.channelsInfo.channels;
+
+export const selectCurrentChannelId = (state) => state.channelsInfo.currentChannelId;
+
+export const selectActiveChannel = (state) => state.channelsInfo.channels
+  .find((channel) => channel.id === state.channelsInfo.currentChannelId);
 
 export const { actions } = channelsInfoSlice;
 
