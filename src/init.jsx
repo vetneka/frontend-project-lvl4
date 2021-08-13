@@ -1,4 +1,6 @@
 // @ts-check
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 import React from 'react';
 import { Provider as StoreProvider } from 'react-redux';

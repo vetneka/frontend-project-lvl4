@@ -9,30 +9,23 @@ import ChatWindow from '../components/ChatWindow.jsx';
 import { fetchChannels } from '../slices/channelsInfoSlice';
 
 const Chat = () => {
-  const [pageState, setPageState] = useState('pending');
+  const processState = useSelector((state) => state.channelsInfo.processState);
 
   const modalType = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (pageState === 'pending') {
-      dispatch(fetchChannels())
-        .then(() => {
-          setPageState('fulfilled');
-        })
-        .catch((error) => {
-          setPageState('rejected');
-          console.error(error);
-        });
+    if (processState.status === 'loading') {
+      dispatch(fetchChannels());
     }
-  }, [pageState]);
+  }, [processState.status]);
 
-  if (pageState === 'pending') {
+  if (processState.status === 'loading') {
     return <div>{t('common.loading')}</div>;
   }
 
-  if (pageState === 'rejected') {
+  if (processState.status === 'error') {
     return <div>{t('common.error')}</div>;
   }
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import axios from 'axios';
 import routes from '../routes.js';
@@ -12,17 +12,22 @@ const createAuthHeader = () => ({
 
 const defaultChannelId = 1;
 
+export const fetchChannels = createAsyncThunk('channelsInfo/fetchChannels', async () => {
+  const response = await axios.get(routes.dataPath(), { headers: createAuthHeader() });
+  return response.data;
+});
+
 const channelsInfoSlice = createSlice({
   name: 'channelsInfo',
   initialState: {
     channels: [],
     currentChannelId: null,
+    processState: {
+      status: 'loading',
+      error: null,
+    },
   },
   reducers: {
-    setInitialState: (state, { payload }) => {
-      state.channels = payload.channels;
-      state.currentChannelId = payload.currentChannelId;
-    },
     setCurrentChannel: (state, { payload }) => {
       state.currentChannelId = payload;
     },
@@ -39,16 +44,27 @@ const channelsInfoSlice = createSlice({
       existingChannel.name = payload.name;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchChannels.pending, (state) => {
+        state.processState.status = 'loading';
+        state.processState.error = null;
+      })
+      .addCase(fetchChannels.fulfilled, (state, { payload }) => {
+        state.channels = payload.channels;
+        state.currentChannelId = payload.currentChannelId;
+        state.processState.status = 'success';
+      })
+      .addCase(fetchChannels.rejected, (state, { error }) => {
+        state.processState.status = 'error';
+        state.processState.error = error.message;
+      })
+  },
 });
 
 export const selectChannelById = (state, channelId) => (
   state.channelsInfo.channels.find((channel) => channel.id === channelId));
 
 export const { actions } = channelsInfoSlice;
-
-export const fetchChannels = () => async (dispatch) => {
-  const response = await axios.get(routes.dataPath(), { headers: createAuthHeader() });
-  dispatch(actions.setInitialState(response.data));
-};
 
 export default channelsInfoSlice.reducer;

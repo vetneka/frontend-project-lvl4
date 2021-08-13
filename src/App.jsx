@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 
 import '../assets/application.scss';
 
@@ -31,7 +29,7 @@ import getAuthInfo from './getAuthInfo';
 
 const AuthProvider = ({ children }) => {
   const [authInfo, setAuthInfo] = useState(() => getAuthInfo());
-  const [loggedIn, setLoggedIn] = useState(!!authInfo?.token);
+  const loggedIn = !!authInfo?.token;
 
   const history = useHistory();
   const location = useLocation();
@@ -41,7 +39,6 @@ const AuthProvider = ({ children }) => {
 
     localStorage.setItem('userId', JSON.stringify(data));
     setAuthInfo(data);
-    setLoggedIn(true);
     history.replace(from);
   };
 
@@ -50,7 +47,6 @@ const AuthProvider = ({ children }) => {
 
     localStorage.removeItem('userId');
     setAuthInfo(null);
-    setLoggedIn(false);
     history.push(from);
   };
 
