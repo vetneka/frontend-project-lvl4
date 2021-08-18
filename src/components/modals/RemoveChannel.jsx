@@ -10,13 +10,14 @@ import { useSocket } from '../../hooks';
 import { selectModalExtraChannel } from '../../slices/modalSlice';
 
 const RemoveChannel = ({ onHide }) => {
-  const { socket, acknowledgeWithTimeout } = useSocket();
+  const { removeChannel } = useSocket();
   const channel = useSelector(selectModalExtraChannel);
   const { t } = useTranslation();
 
   const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     setSubmitting(true);
-    socket.emit('removeChannel', { id: values.channelId }, acknowledgeWithTimeout(
+    removeChannel(
+      { id: values.channelId },
       () => {
         setSubmitting(false);
         onHide();
@@ -25,8 +26,7 @@ const RemoveChannel = ({ onHide }) => {
         setSubmitting(false);
         setErrors({ network: 'errors.network' });
       },
-      1000,
-    ));
+    );
   };
 
   return (

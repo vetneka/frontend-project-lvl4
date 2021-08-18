@@ -9,7 +9,7 @@ import { useSocket } from '../hooks';
 const AddMessageForm = (props) => {
   const { currentChannelId, currentUsername } = props;
   const inputMessageRef = useRef();
-  const { socket, acknowledgeWithTimeout } = useSocket();
+  const { addMessage } = useSocket();
   const { t } = useTranslation();
 
   const handleFormSubmit = (values, { setSubmitting, setErrors, resetForm }) => {
@@ -20,7 +20,8 @@ const AddMessageForm = (props) => {
     };
 
     setSubmitting(true);
-    socket.emit('newMessage', message, acknowledgeWithTimeout(
+    addMessage(
+      message,
       () => {
         setSubmitting(false);
         resetForm();
@@ -31,8 +32,7 @@ const AddMessageForm = (props) => {
         setErrors({ network: 'errors.network' });
         inputMessageRef.current.focus();
       },
-      2000,
-    ));
+    );
   };
 
   useEffect(() => {

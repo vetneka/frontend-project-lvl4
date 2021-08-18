@@ -15,7 +15,7 @@ import { useSocket } from '../../hooks';
 
 const RenameChannel = ({ onHide }) => {
   const inputChannelRef = useRef();
-  const { socket, acknowledgeWithTimeout } = useSocket();
+  const { renameChannel } = useSocket();
   const { t } = useTranslation();
 
   const extraChannel = useSelector(selectModalExtraChannel);
@@ -34,7 +34,8 @@ const RenameChannel = ({ onHide }) => {
     };
 
     setSubmitting(true);
-    socket.emit('renameChannel', renamedChannel, acknowledgeWithTimeout(
+    renameChannel(
+      renamedChannel,
       () => {
         setSubmitting(false);
         onHide();
@@ -44,8 +45,7 @@ const RenameChannel = ({ onHide }) => {
         inputChannelRef.current.focus();
         setErrors({ network: 'errors.network' });
       },
-      2000,
-    ));
+    );
   };
 
   return (

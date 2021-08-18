@@ -14,57 +14,12 @@ import { initReactI18next } from 'react-i18next';
 import resources from './locales';
 
 import store from './store';
-import { actions as channelsInfoActions } from './slices/channelsInfoSlice';
-import { actions as messagesInfoActions } from './slices/messagesInfoSlice';
 
-import { socketContext } from './contexts';
+import SocketProvider from './providers/SocketProvider.jsx';
 
 import NotFound from './pages/NotFound.jsx';
 
 import App from './App.jsx';
-
-const SocketProvider = ({ socket, children }) => {
-  const acknowledgeWithTimeout = (onSuccess, onTimeout, timeout) => {
-    const status = {
-      isCalled: false,
-    };
-
-    const timerId = setTimeout(() => {
-      if (status.isCalled) return;
-      status.isCalled = true;
-      onTimeout();
-    }, timeout);
-
-    return (...args) => {
-      if (status.isCalled) return;
-      status.isCalled = true;
-      clearTimeout(timerId);
-      onSuccess(args);
-    };
-  };
-
-  socket.on('newMessage', (message) => {
-    store.dispatch(messagesInfoActions.addMessage(message));
-  });
-
-  socket.on('newChannel', (channel) => {
-    store.dispatch(channelsInfoActions.addChannel(channel));
-  });
-
-  socket.on('removeChannel', ({ id }) => {
-    store.dispatch(channelsInfoActions.removeChannel(id));
-  });
-
-  socket.on('renameChannel', (channel) => {
-    store.dispatch(channelsInfoActions.renameChannel(channel));
-  });
-
-  return (
-    <socketContext.Provider value={{ socket, acknowledgeWithTimeout }}>
-      {children}
-    </socketContext.Provider>
-  );
-};
 
 const ErrorBoundaryPage = () => <NotFound />;
 

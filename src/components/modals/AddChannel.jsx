@@ -14,7 +14,7 @@ import { selectChannels } from '../../slices/channelsInfoSlice';
 
 const AddChannel = ({ onHide }) => {
   const inputChannelRef = useRef();
-  const { socket, acknowledgeWithTimeout } = useSocket();
+  const { addChannel } = useSocket();
   const { t } = useTranslation();
 
   const allChannels = useSelector(selectChannels);
@@ -30,7 +30,8 @@ const AddChannel = ({ onHide }) => {
     };
 
     setSubmitting(true);
-    socket.emit('newChannel', channel, acknowledgeWithTimeout(
+    addChannel(
+      channel,
       () => {
         setSubmitting(false);
         onHide();
@@ -40,8 +41,7 @@ const AddChannel = ({ onHide }) => {
         inputChannelRef.current.focus();
         setErrors({ network: 'errors.network' });
       },
-      2000,
-    ));
+    );
   };
 
   return (
