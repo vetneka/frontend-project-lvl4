@@ -16,7 +16,7 @@ module.exports = {
     },
   },
   entry: {
-    main: './src/index.jsx',
+    main: './src/index.js',
   },
   output: {
     path: path.join(__dirname, 'dist', 'public'),

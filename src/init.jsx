@@ -13,6 +13,8 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import resources from './locales';
 
+import initSocketApi from './initSocketApi';
+
 import store from './store';
 
 import SocketProvider from './providers/SocketProvider.jsx';
@@ -43,6 +45,8 @@ const init = async (socketClient = io()) => {
 
   const defaultLocale = 'ru';
 
+  const socketApi = initSocketApi(socketClient, store);
+
   await i18n.use(initReactI18next).init({
     lng: defaultLocale,
     debug: false,
@@ -53,7 +57,7 @@ const init = async (socketClient = io()) => {
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary level={LEVEL_WARN} fallbackUI={ErrorBoundaryPage}>
         <StoreProvider store={store}>
-          <SocketProvider socket={socketClient}>
+          <SocketProvider api={socketApi}>
             <App />
           </SocketProvider>
         </StoreProvider>

@@ -9,7 +9,7 @@ import { useSocket } from '../hooks';
 const AddMessageForm = (props) => {
   const { currentChannelId, currentUsername } = props;
   const inputMessageRef = useRef();
-  const { addMessage } = useSocket();
+  const { sendMessage } = useSocket();
   const { t } = useTranslation();
 
   const handleFormSubmit = (values, { setSubmitting, setErrors, resetForm }) => {
@@ -20,7 +20,7 @@ const AddMessageForm = (props) => {
     };
 
     setSubmitting(true);
-    addMessage(
+    sendMessage(
       message,
       () => {
         setSubmitting(false);

@@ -14,7 +14,7 @@ import { selectChannels } from '../../slices/channelsInfoSlice';
 
 const AddChannel = ({ onHide }) => {
   const inputChannelRef = useRef();
-  const { addChannel } = useSocket();
+  const { createChannel } = useSocket();
   const { t } = useTranslation();
 
   const allChannels = useSelector(selectChannels);
@@ -30,7 +30,7 @@ const AddChannel = ({ onHide }) => {
     };
 
     setSubmitting(true);
-    addChannel(
+    createChannel(
       channel,
       () => {
         setSubmitting(false);
